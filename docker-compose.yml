@@ -46,13 +46,29 @@ services:
     #           count: 1
     #           capabilities: [gpu]
 
+  backend:
+    build:
+      context: ./backend
+      dockerfile: ../docker/backend.Dockerfile
+    container_name: apocal-backend
+    restart: unless-stopped
+    env_file:
+      - .env
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./backend:/app
+    depends_on:
+      postgres:
+        condition: service_healthy
+      ollama:
+        condition: service_started
+    command: >
+      sh -c "python manage.py migrate &&
+             python manage.py runserver 0.0.0.0:8000"
+
   # --------------------------------------------------------------------------
-  # K1 / K3 ajouteront ici :
-  #
-  # backend:
-  #   build: { context: ./backend, dockerfile: ../docker/backend.Dockerfile }
-  #   ports: ["8000:8000"]
-  #   ...
+  # K3 ajoutera :
   #
   # frontend:
   #   build: { context: ./frontend, dockerfile: ../docker/frontend.Dockerfile }
