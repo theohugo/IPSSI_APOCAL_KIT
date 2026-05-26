@@ -10,15 +10,40 @@ Les problèmes les plus fréquents et leurs solutions.
 
 Un autre processus utilise le port (3000, 5432, 8000, ou 11434).
 
-```bash
-# Identifier le coupable
-lsof -i :8000          # macOS / Linux
-netstat -ano | findstr 8000  # Windows
+**Solution rapide** : changer le port hôte via `.env`. Décommenter ce qui
+vous arrange dans `.env` :
 
-# Le tuer, ou changer le port dans docker-compose.yml :
-ports:
-  - "8001:8000"        # mapping externe:interne
+```bash
+# .env
+POSTGRES_HOST_PORT=5433     # défaut 5432
+FRONTEND_HOST_PORT=3002     # défaut 3000
 ```
+
+Puis relancer :
+
+```bash
+docker compose down
+docker compose up -d
+```
+
+Le port du conteneur reste 5432 / 3000 (le backend Django parle à Postgres
+en interne via le réseau Docker, indépendamment du port hôte).
+
+**Identifier le coupable** :
+
+```bash
+# macOS / Linux
+lsof -i :8000
+
+# Windows
+netstat -ano | findstr 8000
+```
+
+**Gotcha Windows + IPv6** : sur Windows, `localhost` peut résoudre en IPv6
+(`::1`). Si un serveur PHP local (XAMPP ou `php -S`) écoute sur `::1:8000`,
+il interceptera vos requêtes même si Docker bind sur `0.0.0.0:8000`. Testez
+explicitement avec **`http://127.0.0.1:8000`** ou tuez le serveur PHP avant
+de lancer Docker.
 
 ### Build d'image échoue avec "no space left on device"
 
