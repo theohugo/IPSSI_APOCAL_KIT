@@ -9,7 +9,7 @@
 set -euo pipefail
 
 MODEL="${OLLAMA_MODEL:-llama3.1:8b}"
-CONTAINER="${OLLAMA_CONTAINER:-apocal-ollama}"
+CONTAINER="${OLLAMA_CONTAINER:-apocalipssi-2026-ollama}"
 
 if ! docker ps --format '{{.Names}}' | grep -q "^${CONTAINER}$"; then
     echo "❌ Conteneur Ollama '${CONTAINER}' non démarré."

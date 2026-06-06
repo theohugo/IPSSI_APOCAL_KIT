@@ -9,11 +9,13 @@
 # Puis :   make pull-model
 # ============================================================================
 
+name: apocalipssi-2026
+
 services:
 
   postgres:
     image: postgres:16-alpine
-    container_name: apocal-postgres
+    container_name: apocalipssi-2026-postgres
     restart: unless-stopped
     environment:
       POSTGRES_DB:       ${POSTGRES_DB:-apocal}
@@ -34,7 +36,7 @@ services:
 
   ollama:
     image: ollama/ollama:latest
-    container_name: apocal-ollama
+    container_name: apocalipssi-2026-ollama
     restart: unless-stopped
     ports:
       - "11434:11434"
@@ -53,7 +55,7 @@ services:
     build:
       context: ./backend
       dockerfile: ../docker/backend.Dockerfile
-    container_name: apocal-backend
+    container_name: apocalipssi-2026-backend
     restart: unless-stopped
     env_file:
       - .env
@@ -74,7 +76,7 @@ services:
     build:
       context: ./frontend
       dockerfile: ../docker/frontend.Dockerfile
-    container_name: apocal-frontend
+    container_name: apocalipssi-2026-frontend
     restart: unless-stopped
     env_file:
       - .env

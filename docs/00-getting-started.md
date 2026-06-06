@@ -43,10 +43,10 @@ docker compose up -d
 
 À la fin :
 ```
-✔ Container apocal-postgres   Started
-✔ Container apocal-ollama     Started
-✔ Container apocal-backend    Started
-✔ Container apocal-frontend   Started
+✔ Container apocalipssi-2026-postgres   Started
+✔ Container apocalipssi-2026-ollama     Started
+✔ Container apocalipssi-2026-backend    Started
+✔ Container apocalipssi-2026-frontend   Started
 ```
 
 ### 4. Télécharger le modèle LLM

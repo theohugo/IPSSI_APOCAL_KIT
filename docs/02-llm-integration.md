@@ -43,7 +43,7 @@ Puis :
 ```bash
 docker compose down
 docker compose up -d
-docker exec apocal-ollama ollama pull <nouveau-modèle>
+docker exec apocalipssi-2026-ollama ollama pull <nouveau-modèle>
 ```
 
 > 📝 **Documenter ce choix par un ADR** (voir [07-bonnes-pratiques.md](./07-bonnes-pratiques.md)). C'est attendu en perturbation J2.
