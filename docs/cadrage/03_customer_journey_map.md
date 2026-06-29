@@ -68,4 +68,15 @@
 | **Frictions** | Pas de retour visuel sur la qualité d'extraction · Si le PDF a beaucoup d'images, l'extraction peut être partielle sans que l'étudiant le sache |
 | **Opportunité** | Afficher "X pages extraites, Y caractères" pour rassurer · Message d'avertissement si moins de 500 caractères extraits |
 
+### Sous-étape 3b — Génération du quiz
+
+| | Détail |
+|---|---|
+| **Page** | `/upload` → appel API → `QuizPage.tsx` |
+| **Actions** | Clique "Générer le quiz" · Attend (loader) · Voit les 10 QCM apparaître |
+| **Pensées** | *"35 secondes... c'est long mais ça va."* · *"Est-ce que l'IA est vraiment en train de lire mon cours ?"* · *"Ces questions sont vraiment tirées de mes slides ?"* |
+| **Émotions** | Attente anxieuse les 10 premières secondes → Soulagement quand le quiz apparaît → Surprise positive si les questions sont pertinentes |
+| **Frictions** | Loader sans message contextuel (l'étudiant ne sait pas ce qui se passe : extraction ? génération ? Ollama lent ?) · Si la génération dépasse 60 s, l'utilisateur peut penser que ça a planté · Aucun moyen d'annuler une génération en cours |
+| **Opportunité** | Loader progressif avec états : "Extraction du texte...", "Envoi au modèle IA...", "Génération des questions..." · Afficher une estimation "~30-40 secondes" · Bouton "Annuler" visible |
+
 ---
