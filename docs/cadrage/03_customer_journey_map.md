@@ -133,3 +133,18 @@
 | **Mitigation** | Message d'erreur explicite : "Texte insuffisant extrait de ce PDF — essayez de coller le texte directement" · Laisser l'option texte libre visible comme alternative immédiate |
 
 ---
+
+## Synthèse des frictions — Priorisation MVP
+
+| # | Friction | Étape | Impact | À traiter en MVP ? |
+|---|----------|-------|--------|-------------------|
+| F1 | Email de validation classé en spam sans avertissement | 2 | Moyen | **Oui** — message "vérifiez vos spams" |
+| F2 | Loader de génération sans message contextuel | 3b | Élevé | **Oui** — états progressifs du loader |
+| F3 | PDF avec peu de texte extrait → quiz hors sujet sans alerte | 3a | Élevé | **Oui** — validation quantité texte extrait |
+| F4 | Soumission possible sans répondre à toutes les questions | 3c | Moyen | **Oui** — validation front avant submit |
+| F5 | Pas de lien direct vers "rejouer mes erreurs" depuis les résultats | 3c | Moyen | **Oui** — lien `ReviewMistakesPage` |
+| F6 | Historique illisible au-delà de 10 entrées (pas de filtre) | 4 | Moyen | Non — Release 2 |
+| F7 | Pas de graphe de progression dans le temps | 4 | Faible | Non — Release 2 |
+| F8 | Obligation de re-uploader le PDF pour régénérer un quiz | 4 | Faible | Non — Release 2 |
+
+---
