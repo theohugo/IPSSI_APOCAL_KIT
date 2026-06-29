@@ -148,3 +148,22 @@
 | F8 | Obligation de re-uploader le PDF pour régénérer un quiz | 4 | Faible | Non — Release 2 |
 
 ---
+
+## Persona secondaire — Mme Isabelle Lefèvre (enseignante)
+
+*Émerge via la Perturbation J1 — lundi 14h*
+
+**Profil :** 47 ans, Maître de conférences en Sciences de l'Éducation, IUT de Créteil. Prépare ses évaluations manuellement (3h pour 10 questions). Exige que les données de ses étudiants et de son manuel restent dans l'établissement.
+
+| Étape | Actions | Émotions | Frictions clés |
+|-------|---------|----------|----------------|
+| **Découverte** | Entendu parler par un collègue · Lit la doc · Vérifie la conformité RGPD avec son DSI | Méfiance institutionnelle · Intérêt si souveraineté confirmée | Pas de page dédiée enseignants · Pas de mention "RGPD / hébergement local" visible |
+| **Prise en main** | Uploade un chapitre de son manuel · Génère un quiz · Évalue la qualité pédagogique | Surprise si questions correctes · Déception si trop faciles | Pas de contrôle sur la difficulté · Pas de validation des questions avant distribution |
+| **Signalement d'erreur** | Remarque des erreurs factuelles (Perturbation J4) · Veut signaler à l'équipe technique | Frustration · Perte de confiance | Pas de mécanisme de feedback dans le MVP → déclenche le modèle `QuestionReport` |
+| **Usage régulier** | Génère des QCM pour ses TD · Exporte · Partage avec ses étudiants | Gain de temps réel (3h → 5 min) · Satisfaction si qualité OK | Pas d'export Word/PDF dans le MVP · Pas de gestion de cohorte |
+
+**Besoins non couverts par le MVP → Release 2 :**
+- Validation et modification des questions avant usage
+- Modèle `QuestionReport` pour signaler les erreurs factuelles
+- Export des questions (Word, PDF)
+- Gestion de cohorte / partage avec des étudiants
