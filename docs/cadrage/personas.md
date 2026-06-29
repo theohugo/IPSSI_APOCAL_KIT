@@ -2,16 +2,24 @@
 
 > Artefact de cadrage Jour 1 — APOCAL'IPSSI 2026
 > Produit : **EduTutor IA** — assistant IA de révision, *enseignant-first*, génération ancrée dans les cours (RAG) et 100 % local (Ollama, RGPD).
-> Lien : voir aussi le [Product Backlog](product-backlog.md).
+> Liens : [Product Backlog](product-backlog.md) · [Perturbation J1 — Produit](perturbations/j1-produit.md).
 
 ---
 
 ## 1. Objet du document
 
-Ce document décrit les **utilisateurs cibles** d'EduTutor IA afin d'orienter les décisions produit et la priorisation du backlog. Le positionnement est *enseignant-first*, mais la **cible primaire d'usage** sont les **étudiants du supérieur** qui révisent à partir de leurs cours (PDF/texte). On distingue donc :
+Ce document décrit les **utilisateurs cibles** d'EduTutor IA afin d'orienter les décisions produit et la priorisation du backlog.
 
-- **Personas primaires** — pilotent le MVP (F1–F6) : l'étudiant qui révise.
-- **Persona secondaire** — porte la vision *teacher-first* et les pistes Release 2.
+> **Mise à jour suite à la perturbation J1 (Produit).** Le Product Owner a introduit la persona enseignante **Mme Sophie Lefèvre** et l'a positionnée comme **cible principale, au même niveau que l'étudiant**. EduTutor IA sert désormais **deux familles de personas primaires** :
+>
+> - les **étudiants** qui révisent à partir de leurs cours (usage quotidien) ;
+> - l'**enseignante** qui pilote la révision de sa classe (suivi, repérage, conseils).
+>
+> Détail et décision : voir [Perturbation J1 — Produit](perturbations/j1-produit.md).
+
+On distingue donc :
+
+- **Personas primaires** — pilotent le MVP. Deux usages : l'étudiant qui révise (F1–F6) **et** l'enseignante qui suit sa classe (Espace enseignant).
 - **Anti-persona** — qui le produit **ne** vise **pas**, pour cadrer le périmètre.
 
 Chaque persona indique les **user stories** qu'il justifie (traçabilité avec le backlog).
@@ -76,31 +84,39 @@ Chaque persona indique les **user stories** qu'il justifie (traçabilité avec l
 
 ---
 
-## 4. Persona secondaire — Mme Nadia, l'enseignante (vision *teacher-first*)
+## 4. Persona primaire #3 — Mme Sophie Lefèvre, l'enseignante qui pilote sa classe
+
+> **Persona issue de la perturbation J1 (Produit).** Initialement présentée par le PO comme cible secondaire, elle est désormais **cible principale, au même niveau que l'étudiant**. Ses besoins remontent en conséquence dans le périmètre **must-have / Release 1** (voir [Perturbation J1](perturbations/j1-produit.md)).
 
 | | |
 |---|---|
-| **Âge / situation** | 41 ans, enseignante en IUT |
+| **Âge / situation** | 42 ans, enseignante en BTS Communication à Lyon |
 | **Aisance numérique** | Moyenne, peu de temps à consacrer à de nouveaux outils |
-| **Contexte** | Veut proposer de l'auto-évaluation à ses étudiants à partir de **ses** supports |
-| **Citation** | « Je veux des quiz fidèles à mon cours, sans y passer mes soirées. » |
+| **Contexte** | Encadre **28 étudiants** en révision d'examens ; veut un outil de suivi à partir de **ses** supports |
+| **Citation** | « C'est exactement l'outil qu'il me faut pour suivre la progression de mes 28 étudiants en révision d'examens. Je veux pouvoir voir leurs scores, repérer ceux qui décrochent, et leur envoyer des conseils. » |
 
 **Objectifs**
-- Générer des QCM alignés sur ses propres supports de cours.
-- Offrir un outil d'entraînement à ses étudiants.
-- (R2) Suivre la progression d'une classe.
+- Suivre la **progression** de ses 28 étudiants sur leurs révisions.
+- **Repérer rapidement les décrocheurs** (objectif : en 3 clics).
+- **Envoyer des conseils ciblés** aux étudiants en difficulté.
+- Proposer des quiz **fidèles à ses propres supports de cours** (RAG).
 
 **Frustrations**
+- Aucune vue d'ensemble : impossible de savoir qui décroche sans interroger chaque étudiant.
 - Créer des QCM manuellement est chronophage.
-- Outils pensés pour l'étudiant, jamais pour le pédagogue.
-- Crainte sur la conformité RGPD des données des étudiants.
+- Outils pensés uniquement pour l'étudiant, jamais pour le pédagogue.
+- Crainte sur la conformité RGPD des données de ses étudiants.
 
-**Besoins → User stories**
-- Génération ancrée dans les supports (RAG) → **US-F3.1**, renforcé en **US-R2.1**
-- Tableau de bord enseignant / suivi de classe → **US-R2.2** (Release 2)
-- Niveaux de difficulté des QCM → **US-R2.3** (Release 2)
+**Besoins → User stories** *(nouvelles stories Espace enseignant, must-have suite à la perturbation J1)*
+- Tableau de bord enseignant : scores et progression de la classe → **US-T.1**
+- Repérage des décrocheurs en ≤ 3 clics (tri/alerte sur scores faibles) → **US-T.2**
+- Envoi de conseils ciblés à un étudiant en difficulté → **US-T.3**
+- Génération de QCM ancrée dans ses supports (RAG) → **US-F3.1** (mutualisé avec les étudiants)
+- Garantie RGPD : LLM **local** (Ollama), données des étudiants non envoyées au cloud → contrainte transverse (E7)
 
-**Note de cadrage** : ce persona porte la **différenciation produit** (*enseignant-first*) mais ses besoins relèvent majoritairement de la **Release 2**. Il oriente la vision, pas le MVP de la semaine.
+**Scénario type** : Mme Lefèvre se connecte à l'espace enseignant, ouvre le tableau de bord de sa classe, repère en 3 clics les 4 étudiants sous la moyenne sur le dernier chapitre, et leur envoie un conseil de révision ciblé.
+
+**Note de cadrage** : ce persona porte la **différenciation produit** (*enseignant-first*). Avec la perturbation J1, le tableau de bord de classe, le repérage des décrocheurs et l'envoi de conseils **entrent dans le périmètre prioritaire** (et ne sont plus repoussés en Release 2). Le backlog (GitHub Issues / Product Backlog) doit être actualisé en conséquence.
 
 ---
 
@@ -119,12 +135,12 @@ Chaque persona indique les **user stories** qu'il justifie (traçabilité avec l
 
 | Persona | Type | Pilote | Stories clés |
 |---------|------|--------|--------------|
-| **Léa** | Primaire | MVP F2/F3/F5/F6 | US-F2.x, US-F3.1, US-F5.x, US-F6.1 |
-| **Karim** | Primaire | MVP F1/F6 + RGPD | US-F1.x, US-F6.x, US-Q.1 |
-| **Nadia** | Secondaire | Vision R2 | US-F3.1, US-R2.1/2.2/2.3 |
+| **Léa** | Primaire (étudiant) | MVP F2/F3/F5/F6 | US-F2.x, US-F3.1, US-F5.x, US-F6.1 |
+| **Karim** | Primaire (étudiant) | MVP F1/F6 + RGPD | US-F1.x, US-F6.x, US-Q.1 |
+| **Sophie Lefèvre** | Primaire (enseignante, perturbation J1) | MVP Espace enseignant + F3 | US-T.1, US-T.2, US-T.3, US-F3.1 |
 | **Thomas** | Anti-persona | Hors périmètre | US-W.x |
 
-**À retenir pour le Product Owner** : le **Sprint 1 sert d'abord Léa et Karim** (les deux étudiants). Les besoins de Nadia nourrissent le Release Planning R2 mais ne doivent pas entrer dans le périmètre must-have de la semaine.
+**À retenir pour le Product Owner** : depuis la perturbation J1, le **Sprint 1 sert deux cibles principales** — les étudiants (Léa, Karim) **et** l'enseignante (Mme Lefèvre). Les fonctionnalités de suivi de classe, autrefois en Release 2, font désormais partie du périmètre prioritaire.
 
 ---
 
