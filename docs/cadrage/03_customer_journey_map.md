@@ -52,3 +52,20 @@
 | **Opportunité** | Message "Vérifiez vos spams" affiché dès la page de confirmation · Bouton "Renvoyer l'email" sans avoir à se reconnecter · Le bandeau `VerifyEmailBanner` est déjà en place dans le code — s'assurer qu'il est visible et non ignorable |
 
 ---
+
+## Étape 3 — Premier quiz
+
+**Contexte :** Lucas est sur son dashboard pour la première fois. Il a 45 minutes avant son prochain TP. Il uploade son cours de Réseaux (PDF de 45 pages, 3,2 Mo).
+
+### Sous-étape 3a — Upload du cours
+
+| | Détail |
+|---|---|
+| **Page** | `/upload` (`UploadPage.tsx`) |
+| **Actions** | Clique "Nouveau quiz" · Voit deux options : upload PDF ou saisie texte · Choisit PDF · Glisse son fichier · Voit le message de confirmation avec le nombre de pages extraites |
+| **Pensées** | *"3,2 Mo — c'est dans la limite des 5 Mo, bien."* · *"Combien de pages ça va extraire ?"* · *"Est-ce que pypdf va bien lire les tableaux et les formules de mon cours ?"* |
+| **Émotions** | Curiosité · Légère anxiété si l'upload est lent |
+| **Frictions** | Pas de retour visuel sur la qualité d'extraction · Si le PDF a beaucoup d'images, l'extraction peut être partielle sans que l'étudiant le sache |
+| **Opportunité** | Afficher "X pages extraites, Y caractères" pour rassurer · Message d'avertissement si moins de 500 caractères extraits |
+
+---
