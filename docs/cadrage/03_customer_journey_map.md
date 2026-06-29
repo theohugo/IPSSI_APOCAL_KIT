@@ -22,3 +22,33 @@
 ```
 
 ---
+
+## Étape 1 — Découverte
+
+**Contexte :** À J-10 de ses partiels, Lucas cherche une alternative à ses méthodes de révision actuelles. Il tombe sur EduTutor IA via un post Discord de sa promo.
+
+| | Détail |
+|---|---|
+| **Canaux** | Discord de la promo · Bouche-à-oreille · Résultat Google "quiz IA à partir de mes cours" |
+| **Actions** | Lit la landing page · Regarde la section "Comment ça marche" · Vérifie que c'est gratuit · Cherche si ses données de cours partiront sur des serveurs |
+| **Pensées** | *"Est-ce que ça va vraiment générer des questions sur MON cours de Réseaux ?"* · *"C'est gratuit, y'a forcément un catch."* · *"ChatGPT invente des trucs qui ne sont pas dans mon cours — est-ce que c'est pareil ?"* |
+| **Émotions** | Curiosité · Scepticisme · Légère méfiance |
+| **Frictions** | Absence de preuve sociale visible (pas d'avis, pas de compteur utilisateurs) · Pas de mention explicite RGPD en page d'accueil · Doute sur la pertinence des questions générées |
+| **Opportunité** | Ajouter un badge "Vos cours restent sur notre serveur — RGPD by design" · Démo interactive en landing page · Témoignage d'un étudiant |
+
+---
+
+## Étape 2 — Inscription et validation de l'email
+
+**Contexte :** Convaincu d'essayer, Lucas crée son compte. Il est entre deux cours — il a 5 minutes.
+
+| | Détail |
+|---|---|
+| **Page** | `/signup` → email de validation → `/login` |
+| **Actions** | Saisit son email universitaire + mot de passe · Soumet le formulaire (`SignupPage.tsx`) · Ouvre sa boîte mail · Cherche l'email de validation · Clique le lien · Est redirigé vers `/login` avec le message "Compte activé" |
+| **Pensées** | *"J'espère que ça ne va pas spammer ma boîte."* · *"C'est rapide, bien."* · *"L'email est dans mes spams..."* · *"Ok, mon compte est activé — pas de vérification obligatoire pour accéder apparemment"* (la validation est "soft" : le compte fonctionne même sans clic, mais un bandeau `VerifyEmailBanner` s'affiche) |
+| **Émotions** | Neutre → Légère satisfaction (30 secondes et c'est fait) → Micro-frustration si l'email arrive en spam |
+| **Frictions** | Email de validation classé en spam (domaine inconnu) · Si le lien de validation expire (> 24h), l'utilisateur ne sait pas comment en redemander un · Pas de connexion via compte universitaire (pas de SSO dans le MVP) |
+| **Opportunité** | Message "Vérifiez vos spams" affiché dès la page de confirmation · Bouton "Renvoyer l'email" sans avoir à se reconnecter · Le bandeau `VerifyEmailBanner` est déjà en place dans le code — s'assurer qu'il est visible et non ignorable |
+
+---
