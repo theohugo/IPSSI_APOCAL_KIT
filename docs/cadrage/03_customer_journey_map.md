@@ -106,3 +106,30 @@
 | **Opportunité** | Filtrage de l'historique par titre ou score (Release 2) · Widget "Score moyen cette semaine" sur le Dashboard · Sauvegarde du `source_text` pour re-générer sans re-uploader |
 
 ---
+
+## Étape 5 — Satisfaction & Recommandation ou Abandon
+
+### Scénario A — Satisfaction et recommandation
+
+**Contexte :** Lucas obtient 14/20 en Réseaux alors que la moyenne de sa promo est 10/20.
+
+| | Détail |
+|---|---|
+| **Actions** | Partage EduTutor IA sur le Discord de sa promo · Recommande l'outil à ses camarades de TD · Revient pour les prochains examens |
+| **Pensées** | *"Cet outil m'a permis de repérer exactement les deux chapitres où j'avais des lacunes. Sans ça, j'aurais passé du temps sur ce que je savais déjà."* |
+| **Émotions** | Satisfaction forte · Fierté · Envie de partager |
+| **Impact produit** | Croissance organique par bouche-à-oreille dans les promos |
+
+### Scénario B — Abandon
+
+**Contexte :** La génération échoue sur son PDF de droit constitutionnel (beaucoup de tableaux, peu de texte extractible).
+
+| | Détail |
+|---|---|
+| **Déclencheur** | PDF avec images ou tableaux → extraction vide → génération échoue ou produit des questions hors sujet |
+| **Actions** | Retourne sur ChatGPT ou Quizlet · Ne revient pas |
+| **Pensées** | *"C'est prometteur mais pas fiable sur tous mes cours."* |
+| **Émotions** | Déception modérée · Perte de confiance |
+| **Mitigation** | Message d'erreur explicite : "Texte insuffisant extrait de ce PDF — essayez de coller le texte directement" · Laisser l'option texte libre visible comme alternative immédiate |
+
+---
