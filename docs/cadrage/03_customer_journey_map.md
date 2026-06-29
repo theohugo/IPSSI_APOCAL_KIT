@@ -79,4 +79,15 @@
 | **Frictions** | Loader sans message contextuel (l'étudiant ne sait pas ce qui se passe : extraction ? génération ? Ollama lent ?) · Si la génération dépasse 60 s, l'utilisateur peut penser que ça a planté · Aucun moyen d'annuler une génération en cours |
 | **Opportunité** | Loader progressif avec états : "Extraction du texte...", "Envoi au modèle IA...", "Génération des questions..." · Afficher une estimation "~30-40 secondes" · Bouton "Annuler" visible |
 
+### Sous-étape 3c — Passage du quiz et résultats
+
+| | Détail |
+|---|---|
+| **Page** | `QuizPage.tsx` → soumission → page résultats |
+| **Actions** | Lit les 10 questions · Sélectionne ses réponses (radio buttons, 1 seule par question) · Clique "Soumettre" · Voit son score 7/10 · Voit le détail question par question (correct/incorrect + bonne réponse) |
+| **Pensées** | *"La question 4 est exactement sur le chapitre que j'ai du mal."* · *"7/10 — je pensais mieux maîtriser le routage OSPF."* · *"Je vois exactement où j'ai merdé — c'est utile."* |
+| **Émotions** | Engagement pendant le quiz · Légère surprise face à ses erreurs · Satisfaction d'avoir un feedback précis · Envie de recommencer sur les questions ratées |
+| **Frictions** | Soumission possible sans répondre à toutes les questions (pas de validation front) · Pas de lien direct vers "rejouer mes erreurs" (`ReviewMistakesPage` existe mais peut ne pas être connectée au flux) · Score calculé côté serveur via `selected_index` — vérifier que c'est bien le cas |
+| **Opportunité** | Surligner en rouge les questions sans réponse avant soumission · Lien direct vers `ReviewMistakesPage` depuis la page résultats · Message motivant selon le score : "Excellent !", "Bon début !", "Il reste du travail !" |
+
 ---
