@@ -91,3 +91,18 @@
 | **Opportunité** | Surligner en rouge les questions sans réponse avant soumission · Lien direct vers `ReviewMistakesPage` depuis la page résultats · Message motivant selon le score : "Excellent !", "Bon début !", "Il reste du travail !" |
 
 ---
+
+## Étape 4 — Utilisation régulière
+
+**Contexte :** Lucas revient 2 à 3 fois par semaine pendant les 2 semaines de révision avant ses partiels. Il varie les matières et commence à consulter son historique.
+
+| | Détail |
+|---|---|
+| **Pages** | `DashboardPage.tsx` · `HistoryPage.tsx` · `UploadPage.tsx` (nouveau quiz) |
+| **Actions** | Uploade de nouveaux cours (Algo, BDD, Systèmes) · Consulte son historique (`HistoryPage`) avec la liste de ses quiz (titre, date, score `/10`) · Identifie les matières sous 6/10 · Reteste ces matières le lendemain · Consulte le `DashboardPage` pour avoir une vue d'ensemble |
+| **Pensées** | *"En Réseaux je suis passé de 5/10 à 8/10 en 4 jours — ça marche."* · *"Dommage qu'il n'y ait pas de moyen de filtrer l'historique par matière."* · *"Le mode sombre c'est bien pour réviser le soir."* |
+| **Émotions** | Sentiment de progression et de contrôle · Engagement croissant · Légère frustration sur les fonctionnalités manquantes |
+| **Frictions** | Historique peu lisible quand il dépasse 10-15 entrées (pas de pagination ni de filtrage) · `DashboardPage` peu informatif sans données suffisantes · Pas de graphe de progression · Pour régénérer un quiz sur le même cours, il faut re-uploader le PDF |
+| **Opportunité** | Filtrage de l'historique par titre ou score (Release 2) · Widget "Score moyen cette semaine" sur le Dashboard · Sauvegarde du `source_text` pour re-générer sans re-uploader |
+
+---
