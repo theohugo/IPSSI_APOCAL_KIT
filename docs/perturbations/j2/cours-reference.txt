@@ -1,0 +1,53 @@
+Cours de référence — Les réseaux informatiques : modèles OSI et TCP/IP
+
+1. Introduction aux réseaux
+
+Un réseau informatique est un ensemble d'équipements (ordinateurs, serveurs, routeurs, commutateurs, objets connectés) reliés entre eux afin d'échanger des données et de partager des ressources. Les réseaux se classent par étendue : le réseau personnel (PAN) couvre quelques mètres autour d'un utilisateur, le réseau local (LAN) couvre un bâtiment ou un campus, le réseau métropolitain (MAN) couvre une ville, et le réseau étendu (WAN) relie des sites géographiquement distants, Internet étant le WAN le plus vaste. La communication repose sur des protocoles, c'est-à-dire des règles communes qui définissent le format des messages, l'ordre des échanges et la gestion des erreurs.
+
+2. Le modèle OSI
+
+Le modèle OSI (Open Systems Interconnection), normalisé par l'ISO en 1984, découpe la communication en sept couches. Chaque couche rend un service à la couche supérieure et s'appuie sur la couche inférieure. Cette approche en couches permet de remplacer une technologie sans tout reconstruire.
+
+La couche 1, physique, transmet les bits bruts sur le support (câble cuivre, fibre optique, ondes radio). Elle définit les niveaux de tension, les connecteurs et les débits.
+
+La couche 2, liaison de données, organise les bits en trames, gère l'adressage physique (adresse MAC) et détecte les erreurs de transmission. Le commutateur (switch) opère à cette couche.
+
+La couche 3, réseau, gère l'adressage logique (adresse IP) et le routage des paquets entre réseaux distincts. Le routeur opère à cette couche et choisit le meilleur chemin.
+
+La couche 4, transport, assure le transport de bout en bout. Elle peut être fiable et orientée connexion avec TCP, ou rapide et sans connexion avec UDP. Elle gère le découpage en segments, le contrôle de flux et le contrôle de congestion.
+
+La couche 5, session, ouvre, maintient et ferme les sessions de dialogue entre applications.
+
+La couche 6, présentation, met en forme les données : encodage des caractères, compression et chiffrement.
+
+La couche 7, application, est l'interface avec les programmes de l'utilisateur : navigateur web, client de messagerie, etc.
+
+3. Le modèle TCP/IP
+
+Le modèle TCP/IP, plus ancien et réellement utilisé sur Internet, regroupe ces fonctions en quatre couches : accès réseau (couches 1 et 2 de l'OSI), Internet (couche 3), transport (couche 4) et application (couches 5 à 7). Sa simplicité explique sa domination pratique, tandis que le modèle OSI reste une référence pédagogique pour comprendre les rôles de chaque couche.
+
+4. Adressage IP
+
+Une adresse IPv4 est codée sur 32 bits, notée en quatre nombres décimaux séparés par des points, par exemple 192.168.1.10. Elle se divise en une partie réseau et une partie hôte, déterminée par le masque de sous-réseau (par exemple 255.255.255.0). Les adresses privées (10.0.0.0/8, 172.16.0.0/12, 192.168.0.0/16) ne sont pas routables sur Internet et sont traduites par le mécanisme NAT. Face à l'épuisement des adresses IPv4, IPv6 introduit un adressage sur 128 bits, offrant un espace quasi illimité.
+
+5. Protocoles de transport : TCP et UDP
+
+TCP (Transmission Control Protocol) établit une connexion par une poignée de main en trois temps (SYN, SYN-ACK, ACK) avant tout échange. Il garantit la livraison ordonnée et sans perte grâce aux numéros de séquence et aux accusés de réception, et adapte son débit au réseau par le contrôle de congestion. Il est utilisé pour le web, le courrier électronique et le transfert de fichiers, où la fiabilité prime.
+
+UDP (User Datagram Protocol) n'établit pas de connexion et n'offre aucune garantie de livraison ni d'ordre. En contrepartie, il est plus rapide et plus léger, ce qui convient à la voix sur IP, à la visioconférence, au jeu en ligne et au streaming, où la rapidité prime sur la perte occasionnelle de quelques paquets.
+
+6. Routage
+
+Le routage consiste à déterminer le chemin qu'empruntent les paquets pour atteindre leur destination. Les protocoles de routage interne se classent en deux familles. Les protocoles à vecteur de distance, comme RIP, choisissent la route en comptant le nombre de sauts. Les protocoles à état de liens, comme OSPF (Open Shortest Path First), construisent une carte complète du réseau et calculent le plus court chemin avec l'algorithme de Dijkstra ; ils convergent plus vite et passent mieux à l'échelle. À l'échelle d'Internet, le protocole BGP gère le routage entre les grands systèmes autonomes des opérateurs.
+
+7. Services applicatifs courants
+
+Le DNS (Domain Name System) traduit les noms de domaine lisibles, comme exemple.fr, en adresses IP. Le protocole HTTP, et sa version sécurisée HTTPS qui s'appuie sur TLS pour chiffrer les échanges, transporte les pages web. Le protocole DHCP attribue automatiquement une adresse IP à un équipement qui rejoint le réseau. Les protocoles SMTP, IMAP et POP gèrent l'envoi et la réception du courrier électronique.
+
+8. Sécurité des réseaux
+
+La sécurité repose sur plusieurs principes complémentaires. Le pare-feu (firewall) filtre le trafic selon des règles. Le chiffrement protège la confidentialité des données en transit, notamment via TLS. L'authentification vérifie l'identité des utilisateurs et des machines. La segmentation en VLAN isole des groupes d'équipements pour limiter la propagation d'une attaque. Enfin, la défense en profondeur consiste à empiler plusieurs mesures, de sorte que la défaillance d'une protection ne compromette pas l'ensemble du système.
+
+9. Conclusion
+
+Comprendre les réseaux suppose de maîtriser la logique en couches, la distinction entre adressage physique et logique, le choix entre fiabilité (TCP) et rapidité (UDP), ainsi que les grands services qui font fonctionner Internet au quotidien. Ces fondations permettent ensuite d'aborder des sujets avancés comme la qualité de service, la virtualisation des réseaux ou la supervision.

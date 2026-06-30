@@ -1,0 +1,11 @@
+LLM a renvoyé 3 questions au lieu de 10
+LLM a renvoyé 9 questions au lieu de 10
+LLM a renvoyé 9 questions au lieu de 10
+Cours: 5911 caractères · 5 runs/modèle
+
+| Modèle | RGPD | Latence médiane (s) | p95 (s) | Q valides | Note |
+|---|---|:--:|:--:|:--:|---|
+| Ollama (local) `llama3.1:8b` | ✅ local | 9.6 | 56.0 | 10/10 | LLMError: Question 4 : il faut exactement 4 options. |
+| Ollama (local) `phi3:mini` | ✅ local | 7.8 | 9.9 | invalide | LLMError: Question 2 : il faut exactement 4 options. |
+| Ollama (local) `mistral:7b` | ✅ local | 8.8 | 12.5 | 10/10 | LLMError: Seulement 9 questions générées (10 attendues). |
+

@@ -175,13 +175,14 @@ def main():
         render(md, out)
         print(f"[OK] {os.path.relpath(out, HERE)}")
         n += 1
-    # Perturbations (préfixe equipe-6 ajouté au nom du fichier)
-    for md in sorted(glob.glob(os.path.join(HERE, "perturbations", "*.md"))):
-        base = os.path.splitext(os.path.basename(md))[0]
-        out = os.path.join(os.path.dirname(md), f"equipe-6-{base}.docx")
-        render(md, out)
-        print(f"[OK] {os.path.relpath(out, HERE)}")
-        n += 1
+    # Perturbations + ADR (préfixe equipe-6 ajouté au nom du fichier)
+    for sub in ("perturbations", "adr"):
+        for md in sorted(glob.glob(os.path.join(HERE, sub, "*.md"))):
+            base = os.path.splitext(os.path.basename(md))[0]
+            out = os.path.join(os.path.dirname(md), f"equipe-6-{base}.docx")
+            render(md, out)
+            print(f"[OK] {os.path.relpath(out, HERE)}")
+            n += 1
     print(f"\n{n} document(s) genere(s).")
 
 

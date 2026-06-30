@@ -108,6 +108,37 @@ Le **Sprint Backlog** décompose les user stories tirées du [Product Backlog](p
 
 ---
 
+## 7. Réactualisation — perturbation J2 (décision technique LLM) *(CA-J2-5)*
+
+> Suite à la **perturbation J2** (mardi 10h — latence 45 s → cible ≤ 15 s), des **tâches d'investigation/bascule** sont ajoutées et les stories impactées sont **re-estimées**. Ces tâches sont planifiées sur le **Sprint 3** (mardi 14h-18h, cf. [Release Planning](release-planning.md)). Détail : [Perturbation J2](../perturbations/j2-technique.md) · [ADR-0001](adr/adr-0001-choix-modele-llm.md).
+
+### 7.1 Nouvelles tâches d'investigation / bascule
+
+| US | ID tâche | Tâche technique | Type | Assigné | Estim. (h) | Statut |
+|---|---|---|---|---|:--:|---|
+| US-X.3 | T-J2.1 | Harnais de mesure latence (5 runs, médiane + p95) autour de la génération — `backend/llm/management/commands/bench_llm.py` | Back | Kahil MOKHTARI | 2 | ✅ Fait |
+| US-X.3 | T-J2.2 | Exécuter le benchmark (3 modèles locaux : llama3.1:8b, phi3:mini, mistral:7b) | Back | Souleymane FALL | 2 | ✅ Fait |
+| US-X.3 | T-J2.3 | Noter la qualité /5 des quiz (3 testeurs) + consolider le tableau | Test | Dina · Nikola · Rayan | 1 | Todo |
+| US-X.3 | T-J2.4 | Rédiger et faire signer l'ADR-0001 (décision modèle) | Doc | Amine HADDANE · Hugo RAGUIN | 1 | ✅ Fait |
+| US-F3.1 | T-J2.5 | Basculer sur le modèle retenu (`OLLAMA_MODEL=mistral:7b`) + vérifier ≤ 15 s (p95 12,5 s) | Back | Souleymane · Kahil | 2 | ✅ Fait |
+| US-F3.1 | T-J2.6 | Durcir le prompt/parser (retry + tolérance format) — tous les modèles déviaient parfois | Back | Kahil MOKHTARI | 2 | Todo |
+
+### 7.2 Re-estimation des stories impactées (avant / après)
+
+| Story | SP avant | SP après | Raison |
+|---|:--:|:--:|---|
+| **US-X.3** *(tracer le choix LLM / ADR)* | 3 | **5** | inclut désormais benchmark méthodologique + scoring qualité + ADR |
+| **US-F3.1** *(générer 10 QCM)* | 5 | **6** | ajoute la bascule de modèle + revérification du SLA latence |
+| **US-F3.4** *(erreur/timeout LLM)* | 3 | **2** | un modèle plus rapide réduit le risque de timeout |
+| **Spike SPK-2** *(ADR LLM)* | 3 | **3** | inchangé (absorbé par T-J2.1→T-J2.4) |
+| **Total impacté** | 14 | **16** | +2 SP → absorbés dans la marge du Sprint 3 (vélocité visée 20) |
+
+> **Communication PO** : impact planning annoncé immédiatement — la décision technique tient dans le **Sprint 3** sans décaler la **Release 1** (mercredi 17h45). Aucune story MVP retirée.
+>
+> **Résultat J2** : décision actée ([ADR-0001](adr/adr-0001-choix-modele-llm.md)) → bascule sur **`mistral:7b` (local)**, **p95 12,5 s < 15 s** ✅. Reste un suivi : durcir le prompt/parser (T-J2.6, US-F3.1) et la notation qualité /5 (T-J2.3).
+
+---
+
 ## ✅ Grille d'auto-évaluation
 
 | Critère qualité | Auto-éval | Commentaire / preuve |
