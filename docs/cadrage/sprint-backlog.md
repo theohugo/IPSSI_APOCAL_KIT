@@ -116,7 +116,7 @@ Le **Sprint Backlog** décompose les user stories tirées du [Product Backlog](p
 
 | US | ID tâche | Tâche technique | Type | Assigné | Estim. (h) | Statut |
 |---|---|---|---|---|:--:|---|
-| US-X.3 | T-J2.1 | Harnais de mesure latence (5 runs, médiane + p95) autour de la génération | Back | Kahil MOKHTARI | 2 | Todo |
+| US-X.3 | T-J2.1 | Harnais de mesure latence (5 runs, médiane + p95) autour de la génération — `backend/llm/management/commands/bench_llm.py` | Back | Kahil MOKHTARI | 2 | ✅ Fait |
 | US-X.3 | T-J2.2 | Exécuter le benchmark sur 4 modèles (llama3.1:8b, phi3:mini, mistral:7b, Mistral UE) | Back | Souleymane FALL | 2 | Todo |
 | US-X.3 | T-J2.3 | Noter la qualité /5 des quiz (3 testeurs) + consolider le tableau | Test | Dina · Nikola · Rayan | 1 | Todo |
 | US-X.3 | T-J2.4 | Rédiger et faire signer l'ADR-0001 (décision modèle) | Doc | Amine HADDANE · Hugo RAGUIN | 1 | Todo |

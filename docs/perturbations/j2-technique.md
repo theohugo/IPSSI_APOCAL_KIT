@@ -40,7 +40,26 @@ Un beta-testeur signale une **latence inacceptable : ~45 s** pour générer 10 Q
 | **Ressources** | RAM/disque/GPU consommés par le modèle |
 | **Spécs machine** | _CPU : … · RAM : … · GPU : … · OS : …_ (à compléter) |
 
-> Implémentation : harnais de mesure autour de l'appel de génération (`backend/llm/…`), 5 itérations chronométrées, export du tableau ci-dessous.
+### 2.1 Harnais de mesure (prêt à l'emploi)
+
+Le harnais est **livré et testé** : `backend/llm/management/commands/bench_llm.py`. Il mesure médiane + p95 sur N runs via l'interface réelle `generate_quiz()` et **produit directement le tableau Markdown** ci-dessous.
+
+```bash
+# 1. (une fois) récupérer les modèles locaux candidats
+ollama pull llama3.1:8b && ollama pull phi3:mini && ollama pull mistral:7b
+
+# 2. lancer le benchmark sur le cours de référence (5 runs/modèle)
+cd backend
+python manage.py bench_llm \
+  --source-file ../docs/perturbations/j2/cours-reference.txt \
+  --runs 5 \
+  --specs ollama:llama3.1:8b,ollama:phi3:mini,ollama:mistral:7b
+
+# 3. (repli cloud UE) nécessite MISTRAL_API_KEY dans backend/.env
+python manage.py bench_llm --runs 5 --specs mistral:mistral-small-latest
+```
+
+> ✅ Harnais validé en mode `mock` (smoke test : 10/10 questions, tableau généré). Il reste à l'exécuter sur une machine avec **Ollama + modèles** (poste de Souleymane) pour obtenir les **vrais chiffres** ci-dessous — copier-coller la sortie de `bench_llm` dans le tableau §3.
 
 ---
 
