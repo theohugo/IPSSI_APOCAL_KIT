@@ -117,11 +117,11 @@ Le **Sprint Backlog** décompose les user stories tirées du [Product Backlog](p
 | US | ID tâche | Tâche technique | Type | Assigné | Estim. (h) | Statut |
 |---|---|---|---|---|:--:|---|
 | US-X.3 | T-J2.1 | Harnais de mesure latence (5 runs, médiane + p95) autour de la génération — `backend/llm/management/commands/bench_llm.py` | Back | Kahil MOKHTARI | 2 | ✅ Fait |
-| US-X.3 | T-J2.2 | Exécuter le benchmark sur 4 modèles (llama3.1:8b, phi3:mini, mistral:7b, Mistral UE) | Back | Souleymane FALL | 2 | Todo |
+| US-X.3 | T-J2.2 | Exécuter le benchmark (3 modèles locaux : llama3.1:8b, phi3:mini, mistral:7b) | Back | Souleymane FALL | 2 | ✅ Fait |
 | US-X.3 | T-J2.3 | Noter la qualité /5 des quiz (3 testeurs) + consolider le tableau | Test | Dina · Nikola · Rayan | 1 | Todo |
-| US-X.3 | T-J2.4 | Rédiger et faire signer l'ADR-0001 (décision modèle) | Doc | Amine HADDANE · Hugo RAGUIN | 1 | Todo |
-| US-F3.1 | T-J2.5 | Basculer sur le modèle retenu (config `OLLAMA_MODEL`/provider) + vérifier ≤ 15 s | Back | Souleymane · Kahil | 2 | Todo |
-| US-F3.1 | T-J2.6 | Ajuster le prompt au nouveau modèle (préserver qualité ≥ 4/5) | Back | Kahil MOKHTARI | 1 | Todo |
+| US-X.3 | T-J2.4 | Rédiger et faire signer l'ADR-0001 (décision modèle) | Doc | Amine HADDANE · Hugo RAGUIN | 1 | ✅ Fait |
+| US-F3.1 | T-J2.5 | Basculer sur le modèle retenu (`OLLAMA_MODEL=mistral:7b`) + vérifier ≤ 15 s (p95 12,5 s) | Back | Souleymane · Kahil | 2 | ✅ Fait |
+| US-F3.1 | T-J2.6 | Durcir le prompt/parser (retry + tolérance format) — tous les modèles déviaient parfois | Back | Kahil MOKHTARI | 2 | Todo |
 
 ### 7.2 Re-estimation des stories impactées (avant / après)
 
@@ -134,6 +134,8 @@ Le **Sprint Backlog** décompose les user stories tirées du [Product Backlog](p
 | **Total impacté** | 14 | **16** | +2 SP → absorbés dans la marge du Sprint 3 (vélocité visée 20) |
 
 > **Communication PO** : impact planning annoncé immédiatement — la décision technique tient dans le **Sprint 3** sans décaler la **Release 1** (mercredi 17h45). Aucune story MVP retirée.
+>
+> **Résultat J2** : décision actée ([ADR-0001](adr/adr-0001-choix-modele-llm.md)) → bascule sur **`mistral:7b` (local)**, **p95 12,5 s < 15 s** ✅. Reste un suivi : durcir le prompt/parser (T-J2.6, US-F3.1) et la notation qualité /5 (T-J2.3).
 
 ---
 

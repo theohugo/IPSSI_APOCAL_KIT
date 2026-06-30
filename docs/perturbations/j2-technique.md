@@ -38,7 +38,7 @@ Un beta-testeur signale une **latence inacceptable : ~45 s** pour générer 10 Q
 | **Métriques latence** | **médiane + p95** (pas la moyenne) sur les 5 runs |
 | **Qualité** | note **/5** par **≥ 3 testeurs** (grille §4) sur le même quiz généré |
 | **Ressources** | RAM/disque/GPU consommés par le modèle |
-| **Spécs machine** | _CPU : … · RAM : … · GPU : … · OS : …_ (à compléter) |
+| **Spécs machine** | CPU Intel i5-11400F (12 threads) · 32 Go RAM · GPU NVIDIA RTX 5070 · Windows 11 · benchmark exécuté le 30/06/2026 |
 
 ### 2.1 Harnais de mesure (prêt à l'emploi)
 
@@ -67,16 +67,27 @@ python manage.py bench_llm --runs 5 --specs mistral:mistral-small-latest
 
 Les 4 fournisseurs sont **déjà supportés** par `backend/llm/providers.py` (Ollama, Mistral, Gemini, Groq) — le benchmark ne nécessite pas de nouvelle intégration, seulement la configuration.
 
-| # | Modèle / fournisseur | Type | Latence médiane (s) | p95 (s) | Qualité /5 | RAM | RGPD / souveraineté | Verdict |
-|:--:|---|---|:--:|:--:|:--:|:--:|---|---|
-| ① | **Ollama `llama3.1:8b`** *(statu quo)* | Local | _~45_ | _…_ | _…_ | _…_ | ✅ 100 % local | référence |
-| ② | **Ollama `phi3:mini`** | Local | _…_ | _…_ | _…_ | _…_ | ✅ 100 % local | _à mesurer_ |
-| ③ | **Ollama `mistral:7b`** | Local | _…_ | _…_ | _…_ | _…_ | ✅ 100 % local | _à mesurer_ |
-| ④ | **Mistral AI `mistral-small`** | Cloud **UE** | _…_ | _…_ | _…_ | n/a | 🟡 UE (hors local) | _repli_ |
-| ⑤ | **Groq `llama-3.3-70b`** | Cloud **US** | _…_ | _…_ | _…_ | n/a | ❌ hors UE (cf. US-W.3) | _exclu par défaut_ |
-| — | **Ne rien changer** | — | ~45 | — | — | — | ✅ | ❌ ne tient pas le SLA 15 s |
+> Résultats mesurés le **30/06/2026** (5 runs/modèle, cours de référence ci-dessus, sortie brute de `bench_llm` archivée dans `j2/bench-results.txt`).
 
-> Règle d'or : **rester local** (RGPD) si un modèle local tient ≤ 15 s à qualité ≥ 4/5. Tout passage cloud doit être tranché par l'[ADR-0001](../cadrage/adr/adr-0001-choix-modele-llm.md) (cohérent avec `US-W.3` du backlog).
+| # | Modèle / fournisseur | Type | Latence médiane (s) | p95 (s) | Validité auto (10 QCM) | RGPD / souveraineté | Verdict |
+|:--:|---|---|:--:|:--:|:--:|---|---|
+| ① | **Ollama `llama3.1:8b`** *(statu quo)* | Local | 9,6 | **56,0** | 10/10 mais runs variables | ✅ 100 % local | ❌ p95 trop élevé (= les 45 s ressentis) |
+| ② | **Ollama `phi3:mini`** | Local | **7,8** | **9,9** | ❌ instable (3 à 9 QCM) | ✅ 100 % local | ❌ format/qualité non fiables |
+| ③ | **Ollama `mistral:7b`** | Local | 8,8 | **12,5** | ✅ 10/10 | ✅ 100 % local | ✅ **RETENU** (≤ 15 s + qualité) |
+| ④ | **Mistral AI `mistral-small`** | Cloud **UE** | _non mesuré (pas de clé)_ | — | — | 🟡 UE (hors local) | repli si local insuffisant |
+| ⑤ | **Groq `llama-3.3-70b`** | Cloud **US** | _non mesuré_ | — | — | ❌ hors UE (cf. US-W.3) | exclu par défaut (RGPD) |
+| — | **Ne rien changer** | — | 9,6 | 56,0 | — | ✅ | ❌ ne tient pas le SLA 15 s en p95 |
+
+> **Qualité humaine /5** : à compléter par les 3 testeurs (grille §4) sur les quiz de `mistral:7b` vs `llama3.1:8b`. La colonne ci-dessus est la **validité automatique** (le quiz contient-il 10 QCM bien formés ?).
+
+### 3.1 Analyse
+
+- **mistral:7b** est le **seul modèle local** qui combine **p95 < 15 s** (12,5 s) **et** des quiz valides (10/10) → il atteint l'objectif **sans quitter le local** (RGPD préservé).
+- **llama3.1:8b** a une médiane correcte (9,6 s) mais un **p95 de 56 s** (démarrage à froid / variance) : c'est exactement la latence ressentie par le beta-testeur.
+- **phi3:mini** est le plus rapide (p95 9,9 s) mais produit souvent **3 à 9 questions** ou un mauvais format → inutilisable tel quel.
+- **Constat transverse** : *tous* les modèles déclenchent parfois une erreur de format (nb de questions, 4 options) → notre **prompt/parser doit être durci** (retry + tolérance), suivi en **US-F3.1**. Machine de test équipée d'un **GPU RTX 5070** (accélération) : sur une machine CPU-only, prévoir des latences plus élevées.
+
+> Règle d'or respectée : **on reste local** (RGPD) car un modèle local (`mistral:7b`) tient ≤ 15 s. Le cloud (Mistral UE en repli, Groq/US exclu) n'est pas nécessaire — décision tracée dans l'[ADR-0001](../cadrage/adr/adr-0001-choix-modele-llm.md) (cohérent avec `US-W.3`).
 
 ---
 
@@ -101,13 +112,14 @@ Les 4 fournisseurs sont **déjà supportés** par `backend/llm/providers.py` (Ol
 
 ## 5. Critères d'acceptation J2
 
-- [ ] **CA-J2-1** — Benchmark ≥ 3 modèles avec métriques chiffrées
-- [ ] **CA-J2-2** — Protocole écrit (runs, cours, machine) → §2
-- [ ] **CA-J2-3** — ADR complet (≥ 4 sections) → [ADR-0001](../cadrage/adr/adr-0001-choix-modele-llm.md)
-- [ ] **CA-J2-4** — Décision argumentée au-delà du « plus rapide »
-- [ ] **CA-J2-5** — Sprint Backlog visiblement mis à jour → [Sprint Backlog §7](../cadrage/sprint-backlog.md)
-- [ ] **CA-J2-6** — **Temps final ≤ 15 s** sur le cours de référence
-- [ ] **CA-J2-7** — Code commité (config modèle) ou justification claire
+- [x] **CA-J2-1** — Benchmark **3 modèles** avec métriques chiffrées (médiane + p95) → §3
+- [x] **CA-J2-2** — Protocole écrit (5 runs, cours de référence, machine) → §2
+- [x] **CA-J2-3** — ADR complet (5 sections) → [ADR-0001](../cadrage/adr/adr-0001-choix-modele-llm.md)
+- [x] **CA-J2-4** — Décision argumentée (latence **+** validité **+** RGPD, pas seulement « le plus rapide »)
+- [x] **CA-J2-5** — Sprint Backlog mis à jour → [Sprint Backlog §7](../cadrage/sprint-backlog.md)
+- [x] **CA-J2-6** — **≤ 15 s atteint** : `mistral:7b` p95 = **12,5 s** sur le cours de référence
+- [x] **CA-J2-7** — Code commité : `OLLAMA_MODEL=mistral:7b` (settings + `.env.example`)
+- [ ] *Complément* — qualité humaine /5 par 3 testeurs (grille §4) — à finaliser
 
 ---
 

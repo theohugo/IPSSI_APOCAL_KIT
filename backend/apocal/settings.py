@@ -227,7 +227,10 @@ LLM_BACKEND = config("LLM_BACKEND", default="ollama")
 
 # --- Ollama (local, gratuit) ---
 OLLAMA_HOST = config("OLLAMA_HOST", default="http://ollama:11434")
-OLLAMA_MODEL = config("OLLAMA_MODEL", default="llama3.1:8b")
+# Modèle par défaut : mistral:7b retenu après le benchmark J2 (cf. ADR-0001).
+# Meilleur compromis latence/qualité 100 % local : p95 ~12,5 s (< cible 15 s)
+# avec 10 QCM valides, vs llama3.1:8b (p95 ~56 s) et phi3:mini (qualité instable).
+OLLAMA_MODEL = config("OLLAMA_MODEL", default="mistral:7b")
 # Délai max (secondes) d'attente d'une génération Ollama. Sur CPU, un modèle 8B
 # met facilement 2 à 5 minutes pour 10 QCM : 120 s était trop court (timeout ->
 # 502). Défaut généreux, ajustable via .env (OLLAMA_TIMEOUT).

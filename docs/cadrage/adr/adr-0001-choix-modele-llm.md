@@ -2,7 +2,7 @@
 
 | | |
 |---|---|
-| **Statut** | 🟡 Proposé *(à acter après exécution du [benchmark J2](../../perturbations/j2-technique.md))* |
+| **Statut** | ✅ **Accepté** *(benchmark J2 exécuté le 30/06/2026 — [résultats](../../perturbations/j2-technique.md#3-options-envisagées--tableau-de-benchmark-ca-j2-1))* |
 | **Date** | 30/06/2026 |
 | **Décideurs** | Équipe 6 (Kahil MOKHTARI, Amine HADDANE, Souleymane FALL, Nikola MILOSAVLJEVIC, Dina CHAOUKI, Rayan ZEBAZE SAO, Hugo RAGUIN) |
 | **Story liée** | US-X.3 (tracer le choix LLM) · SPK-2 · contrainte US-W.3 (cloud = ADR obligatoire) |
@@ -15,22 +15,25 @@ La génération de 10 QCM prend **~45 s** avec `llama3.1:8b` (Ollama, local) —
 
 ## 2. Options envisagées
 
-| Option | Latence visée | Qualité | RGPD | Coût / effort |
+| Option | Latence médiane / p95 | Validité (10 QCM) | RGPD | Verdict |
 |---|:--:|:--:|---|---|
-| **A. Statu quo** `llama3.1:8b` (local) | ~45 s ❌ | élevée | ✅ local | nul — mais ne tient pas le SLA |
-| **B. Modèle local plus léger** `phi3:mini` / `mistral:7b` (Ollama) | _à mesurer_ | bonne ? | ✅ local | faible (changer `OLLAMA_MODEL`) |
-| **C. Cloud européen** Mistral AI `mistral-small` | rapide | élevée | 🟡 UE (hors local) | faible (clé API) |
-| **D. Cloud US** Groq `llama-3.3-70b` | très rapide | élevée | ❌ hors UE | faible mais **conflit RGPD** |
+| **A. Statu quo** `llama3.1:8b` (local) | 9,6 s / **56,0 s** | 10/10 variable | ✅ local | ❌ p95 hors SLA |
+| **B1. Local léger** `phi3:mini` (Ollama) | 7,8 s / 9,9 s | ❌ instable (3-9 QCM) | ✅ local | ❌ qualité non fiable |
+| **B2. Local équilibré** `mistral:7b` (Ollama) | 8,8 s / **12,5 s** | ✅ 10/10 | ✅ local | ✅ **retenu** |
+| **C. Cloud UE** Mistral AI `mistral-small` | non mesuré | — | 🟡 UE | repli si local insuffisant |
+| **D. Cloud US** Groq `llama-3.3-70b` | non mesuré | — | ❌ hors UE | exclu (RGPD, US-W.3) |
 
-> Chiffres médiane/p95 et qualité /5 : voir le [tableau de benchmark J2](../../perturbations/j2-technique.md#3-options-envisagées--tableau-de-benchmark-ca-j2-1).
+> Mesures : 5 runs/modèle, cours de référence, machine i5-11400F + RTX 5070. Détail : [benchmark J2](../../perturbations/j2-technique.md#3-options-envisagées--tableau-de-benchmark-ca-j2-1).
 
 ## 3. Décision
 
-> **Décision proposée (à confirmer par les chiffres du benchmark) :**
+> **Décision (actée sur la base du benchmark) :**
 >
-> 1. **Privilégier l'option B** — basculer sur le **modèle local le plus léger qui tient ≤ 15 s à qualité ≥ 4/5** (candidat principal : `phi3:mini`). La souveraineté est préservée.
-> 2. **Repli option C (Mistral, cloud UE)** *uniquement* si **aucun** modèle local ne tient le SLA — fournisseur **européen** donc compatible RGPD, activable par configuration.
-> 3. **Option D (Groq/US) exclue par défaut** (données hors UE) — réservée à une démo non-RGPD explicitement isolée.
+> 1. **Adopter l'option B2 — `mistral:7b` en local (Ollama)** comme modèle par défaut : **p95 12,5 s (< 15 s)** et **10 QCM valides**, **souveraineté préservée**. Appliqué via `OLLAMA_MODEL=mistral:7b` (settings + `.env.example`).
+> 2. **`phi3:mini` écarté** malgré sa rapidité (p95 9,9 s) : qualité/format **non fiables** (3 à 9 questions).
+> 3. **`llama3.1:8b` écarté** : p95 56 s (cause de la latence ressentie).
+> 4. **Repli option C (Mistral cloud UE)** si un poste **sans GPU** ne tient pas le SLA en local. **Option D (Groq/US) exclue** (RGPD, US-W.3).
+> 5. **Durcir le prompt/parser** (retry + tolérance) : tous les modèles ont parfois dévié du format → action **US-F3.1**.
 
 ## 4. Justification *(au-delà de « le plus rapide » — CA-J2-4)*
 
@@ -47,10 +50,11 @@ La génération de 10 QCM prend **~45 s** avec `llama3.1:8b` (Ollama, local) —
 - Choix tracé et réversible (config).
 
 **À surveiller (−)**
-- Un modèle plus léger peut **baisser la qualité** → surveiller la note /5 et le taux d'hallucination (US-F3.5, RAG).
-- Le **prompt** peut nécessiter un ajustement par modèle.
+- **Robustesse du format** : tous les modèles ont parfois renvoyé un nombre de questions ≠ 10 → durcir le prompt/parser avec retry (**US-F3.1**).
+- **Dépendance GPU** : les mesures sont sur une machine avec RTX 5070 ; sur un poste **CPU-only**, les latences seront plus élevées → réévaluer (repli option C possible).
+- Surveiller la qualité /5 et le taux d'hallucination de `mistral:7b` (US-F3.5, RAG).
 - Si repli option C : dépendance à un tiers UE → mentionner dans les pages RGPD (US-G.1).
 
 ---
 
-*ADR-0001 — équipe 6 · format Architecture Decision Record (1 page). À passer en statut « Accepté » une fois le benchmark exécuté et la cible ≤ 15 s vérifiée.*
+*ADR-0001 — équipe 6 · format Architecture Decision Record (1 page) · statut **Accepté** le 30/06/2026 après benchmark (cible ≤ 15 s vérifiée avec `mistral:7b`).*

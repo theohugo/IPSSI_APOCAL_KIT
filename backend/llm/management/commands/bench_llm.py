@@ -29,7 +29,6 @@ from django.conf import settings
 from django.core.management.base import BaseCommand
 
 from llm.providers import PROVIDERS
-from llm.services.base import LLMError
 from llm.services.factory import _BACKENDS
 
 # Candidats par défaut de la perturbation J2 (ordre = statu quo puis options).
@@ -93,13 +92,20 @@ class Command(BaseCommand):
                     qs = client.generate_quiz(source_text=source, title=title)
                     lat.append(time.perf_counter() - t0)
                     nq = len(qs)
-                except (LLMError, Exception) as e:  # noqa: BLE001 - on veut tout capturer
+                except Exception as e:  # noqa: BLE001 - on veut tout capturer
+                    dt = time.perf_counter() - t0
+                    msg = str(e).lower()
                     err = f"{type(e).__name__}: {e}"[:80]
-                    break
+                    if "injoignable" in msg or "connection" in msg or "timeout" in msg:
+                        break  # échec infra : latence non significative, on arrête
+                    # Le modèle a RÉPONDU mais sortie invalide (ex. 9 Q) :
+                    # la latence d'inférence est réelle, on la conserve.
+                    lat.append(dt)
             if lat:
                 med = statistics.median(lat)
                 p95 = sorted(lat)[max(0, round(0.95 * len(lat)) - 1)]
-                rows.append((label, rgpd, f"{med:.1f}", f"{p95:.1f}", f"{nq}/10", err or "ok"))
+                qval = f"{nq}/10" if nq is not None else "invalide"
+                rows.append((label, rgpd, f"{med:.1f}", f"{p95:.1f}", qval, err or "ok"))
             else:
                 rows.append((label, rgpd, "—", "—", "—", err or "échec"))
 
