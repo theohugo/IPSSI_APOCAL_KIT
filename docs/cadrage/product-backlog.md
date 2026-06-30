@@ -1,4 +1,20 @@
 # Product Backlog — EduTutor IA
+
+## 🗂️ Identification du document
+
+| | |
+|---|---|
+| **Équipe** | n° 6 |
+| **Membres** | Kahil MOKHTARI · Amine HADDANE · Souleymane FALL · Nikola MILOSAVLJEVIC · Dina CHAOUKI · Rayan ZEBAZE SAO · Hugo RAGUIN |
+| **Sprint concerné** | Cadrage |
+| **Artefact** | 6 sur 7 — Product Backlog |
+| **Version** | v1.0 |
+| **Date de remise** | 30/06/2026 |
+| **Statut** | Draft (à valider PO) |
+| **Rédacteur** | Souleymane FALL |
+| **Fichier** | `equipe-6-product-backlog-v1.0` |
+
+---
  
 > **Artefact de cadrage Jour 1 — APOCAL'IPSSI 2026**
 >
@@ -299,4 +315,39 @@ Vérification appliquée à toutes les stories must-have ; exemple sur **US-F3.1
 - **Décisions attendues du PO** : (1) confirmer le périmètre Must ci-dessus ; (2) trancher les `S` à inclure dans le Sprint 1 ; (3) acter la réponse de principe à P1.
 ---
  
-*Document vivant — mis à jour à chaque revue de sprint.
+# 10. Grille d'auto-évaluation
+
+| Critère qualité | Auto-éval | Commentaire / preuve |
+|---|:---:|---|
+| Definition of Ready et Definition of Done explicites | ☑ Oui | §2 : DoR (6 critères) + DoD (8 critères). |
+| Priorisation MoSCoW appliquée à chaque story | ☑ Oui | Colonne MoSCoW (🔴M/🟠S/🟡C/⚪W) sur toutes les stories. |
+| Estimation en story points (Fibonacci) | ☑ Oui | Colonne Pts + §8 récap des points. |
+| Stories au format INVEST + critères d'acceptation Given/When/Then | ☑ Oui | §7 contrôle INVEST sur US-F3.1 + critères d'acceptation. |
+| Couverture du MVP F1-F6 + transverse (sécurité, RGPD, CI/CD) | ☑ Oui | Épics E1–E10, Release 1 complète. |
+| Inventaire brownfield de l'existant (état réel du code) | ☑ Oui | Colonne « État code » (✅/🔧/⬜) par story. |
+| Pistes Release 2 cataloguées | ☑ Oui | §5 (E11–E12) + Won't have tracé. |
+| Préparation des 5 perturbations (spikes) | ☑ Oui | §6 SPK-1 à SPK-5 rattachés aux perturbations. |
+| Notes d'arbitrage fournies au PO | ☑ Oui | §9 risques + décisions attendues du PO. |
+| Le document a été relu et validé par l'équipe | ☑ Oui | Revue d'équipe avant remise · validation PO en attente. |
+
+---
+ 
+# 11. Références
+
+- Cours Agile/Scrum (Mohamed EL AFRIT) — mohamedelafrit.com/teaching/APOCALIPSSI
+- Scrum Guide officiel FR — scrumguides.org
+- Mike Cohn — *User Stories Applied* (INVEST, story points)
+- Dai Clegg — méthode de priorisation MoSCoW
+- Sources internes : [Product Vision Board](product-vision-board.md) · [Personas](personas.md) · [Customer Journey Map](03_customer_journey_map.md)
+
+---
+ 
+# 12. Convention de versionnement
+
+- **v1.0** — backlog initial issu du cadrage (30/06/2026)
+- **v1.x** — mises à jour à chaque revue de sprint (ajout/retrait de stories, recalibrage)
+- **v2.0** — révision majeure suite à une perturbation (changement de scope)
+
+---
+ 
+*Document vivant — mis à jour à chaque revue de sprint.*

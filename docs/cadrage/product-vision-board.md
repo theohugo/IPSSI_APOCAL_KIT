@@ -1,9 +1,19 @@
 # Product Vision Board — EduTutor IA
 
-> **Artefact de cadrage #1** · Semaine APOCAL'IPSSI 2026  
-> Rédigé par : Dina  
-> Date : 29 juin 2026  
-> Méthode : Roman Pichler (5 composants) + Vision Statement Geoffrey Moore
+## 🗂️ Identification du document
+
+| | |
+|---|---|
+| **Équipe** | n° 6 |
+| **Membres** | Kahil MOKHTARI · Amine HADDANE · Souleymane FALL · Nikola MILOSAVLJEVIC · Dina CHAOUKI · Rayan ZEBAZE SAO · Hugo RAGUIN |
+| **Sprint concerné** | Cadrage |
+| **Artefact** | 1 sur 7 — Product Vision Board |
+| **Version** | v1.0 |
+| **Date de remise** | 29/06/2026 |
+| **Statut** | Draft (à valider PO) |
+| **Rédacteur** | Dina CHAOUKI |
+| **Fichier** | `equipe-6-product-vision-board-v1.0` |
+| **Méthode** | Roman Pichler (5 composants) + Vision Statement Geoffrey Moore |
 
 ---
 
@@ -21,11 +31,16 @@
 
 ## 👥 Target Groups (Groupes cibles)
 
-| Segment | Description | Profil |
-|---|---|---|
-| **Étudiant·e du supérieur** *(cible primaire)* | 18-28 ans, BTS, Licence, Master. Veut réviser ses propres cours avant les examens. N'a pas le temps de créer ses fiches lui-même. | Utilisateur quotidien de l'application |
-| **Enseignant·e** *(cible primaire — suite perturbation J1)* | Ex. Mme Sophie Lefèvre, 42 ans, prof de BTS Communication à Lyon, 28 étudiants. Veut suivre la progression de sa classe, repérer les décrocheurs en 3 clics, envoyer des conseils ciblés. **Repositionnée cible primaire au même niveau que l'étudiant par décision PO (J1).** | Utilisateur superviseur / espace enseignant |
-| **Administrateur plateforme** *(interne)* | Équipe EduTutor. Gère la configuration du LLM, les utilisateurs, la modération et les KPIs produit. | Back-office |
+> Trois niveaux de cibles : **primaire** (acteurs principaux du MVP), **secondaire/tertiaire** (acheteur B2B), avec **volume marché FR** et **critère de décision** pour chacune.
+
+| Segment | Profil & volume marché (FR) | Pain point | Critère de décision |
+|---|---|---|---|
+| **Étudiant·e du supérieur** *(cible primaire)* | 18-28 ans, BTS / Licence / Master · usage smartphone & laptop quotidien · **~2,7 M d'étudiant·e·s dans le supérieur** (MESR 2024) | 5 à 15 h/semaine perdues à chercher ou créer des supports de révision | Confidentialité des cours (local-first) + génération rapide (< 60 s) |
+| **Enseignant·e** *(cible primaire — décision PO J1)* | Ex. Mme Sophie Lefèvre, 42 ans, prof de BTS Communication à Lyon, 28 étudiants · maîtrise numérique modérée · **~770 000 enseignant·e·s** (Éducation nationale 2024) | ~12 h/mois en correction et préparation de supports d'évaluation ; aucune vue d'ensemble des décrocheurs | Interface simple sans configuration + suivi de classe + conformité RGPD des données élèves |
+| **Établissement scolaire** *(cible tertiaire — acheteur B2B)* | Direction de lycée privé / BTS / école supérieure · responsable pédagogique ou DSI · **~7 500 lycées + ~3 500 établissements du supérieur** | Budget edtech contraint (< 5 €/élève/an) + obligation RGPD non négociable | Aucune donnée hors UE (clause contractuelle) + coût prévisible par élève/an |
+| **Administrateur plateforme** *(interne)* | Équipe EduTutor. Gère la configuration du LLM, les utilisateurs, la modération et les KPIs produit. | Maintien en condition opérationnelle du service et de la souveraineté | Contrôle total de la stack (Ollama local) sans dépendance cloud |
+
+> **Note de cadrage (perturbation J1).** Le Product Owner a repositionné l'enseignant·e **cible primaire au même niveau que l'étudiant** : les fonctionnalités de suivi de classe entrent dans le périmètre prioritaire (voir [Personas](personas.md) et [Perturbation J1](perturbations/j1-produit.md)). L'**établissement** reste cible tertiaire (acheteur B2B), pertinente pour le modèle économique mais hors périmètre MVP.
 
 ---
 
@@ -147,5 +162,45 @@
 
 ---
 
+## ✅ Grille d'auto-évaluation
+
+| Critère qualité | Auto-éval | Commentaire / preuve |
+|---|:---:|---|
+| La Vision tient en 1 phrase mémorable et survit aux releases | ☑ Oui | Vision Statement Geoffrey Moore en §🌟 : « générer des quiz ancrés dans le cours, IA locale souveraine ». |
+| Les 3 niveaux de cibles (primaire / secondaire / tertiaire) sont décrits avec profil + volume + pain point | ☑ Oui | §👥 : étudiant (~2,7 M), enseignant (~770 k), établissement B2B (~7 500 lycées) + critère de décision. |
+| Au moins 3 besoins par cible formulés en verbes d'action | ☑ Oui | §💡 : 3 besoins étudiant, 3 besoins enseignant, 2 besoins admin (format user story). |
+| Le produit est décrit en 3-5 caractéristiques signature (pas une liste technique) | ☑ Oui | §📦 : F1–F6 orientées valeur + différenciateurs IA locale / RAG. |
+| Les 6 features F1-F6 du MVP sont rappelées et des pistes Release 2 identifiées | ☑ Oui | §📦 (F1–F6) + Product Backlog §5 (catalogue R2). |
+| Les Business Goals comportent au moins 3 KPI chiffrés et datés | ☑ Oui | §📊 : 500 inscrits/6 mois, rétention ≥ 60 %/3 mois, NPS ≥ 40/6 mois, 10 établissements/12 mois. |
+| Les 4 concurrents sont cartographiés avec positionnement + limite | ☑ Oui | §🆚 : Wilgo, Quizlet AI, Khanmigo, Leo. |
+| Les 3 différenciateurs sont argumentés au-delà du slogan | ☑ Oui | §🆚 : enseignant-first, ancrage RAG traçable, Ollama local RGPD. |
+| Le document a été relu et validé par l'équipe | ☑ Oui | Revue d'équipe avant remise · validation PO en attente. |
+
+---
+
+## 📚 Références
+
+**Incontournables**
+- Cours Agile/Scrum (Mohamed EL AFRIT) — mohamedelafrit.com/teaching/Master_Classe_Agile/cours.html
+- Scrum Guide officiel FR — scrumguides.org
+- Site APOCAL'IPSSI — mohamedelafrit.com/teaching/APOCALIPSSI
+
+**Spécifiques à ce document**
+- Roman Pichler — Product Vision Board : https://www.romanpichler.com/tools/product-vision-board/
+- Geoffrey Moore — *Crossing the Chasm* (formule de vision)
+- Concurrents : Wilgo (wilgo.ai), Leo (iamleo.ai), Quizlet AI (quizlet.com), Khanmigo (khanmigo.ai)
+- Volumes marché : MESR 2024 (étudiants), Éducation nationale 2024 (enseignants)
+
+---
+
+## 🔄 Convention de versionnement
+
+- **v1.0** — version initiale produite lors du cadrage matinal (29/06/2026)
+- **v1.x** — révisions mineures (typo, ajout d'item) après revue PO
+- **v2.0** — révision majeure suite à une perturbation (changement de scope)
+- Chaque version est commitée séparément avec un message Git explicite ; le statut « Validé PO » nécessite une trace écrite.
+
+---
+
 *Product Vision Board rédigé selon la méthode Roman Pichler — Vision Statement selon Geoffrey Moore (Crossing the Chasm)*  
-*Dépôt : `/docs/cadrage/product-vision-board.md` — Tag : v0.1 — 29/06/2026*
+*Dépôt : `/docs/cadrage/product-vision-board.md` — v1.0 — 29/06/2026*
