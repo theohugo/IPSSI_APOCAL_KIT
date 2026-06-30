@@ -148,25 +148,30 @@ def render(md_path, docx_path):
     return docx_path
 
 
-# Mapping source Markdown -> nom de sortie .docx (convention APOCAL'IPSSI :
-# equipe-XX-nom-document-vY.Z.docx). La source de vérité reste le .md.
-OUTPUTS = {
-    "product-vision-board.md": "equipe-6-product-vision-board-v1.0.docx",
-    "personas.md": "equipe-6-personas-v1.2.docx",
-    "03_customer_journey_map.md": "equipe-6-customer-journey-map-v1.0.docx",
-    "product-backlog.md": "equipe-6-product-backlog-v1.0.docx",
+# Convention APOCAL'IPSSI : equipe-6-<slug>-vY.Z.docx. La source de vérité
+# reste le .md ; les .docx sont des rendus régénérables et auto-découverts.
+# Slug de sortie par fichier source (sinon le nom du fichier est réutilisé).
+SLUGS = {
+    "03_customer_journey_map": "customer-journey-map",
 }
+# Version par artefact (v1.0 par défaut).
+VERSIONS = {
+    "personas": "v1.2",
+}
+
+
+def out_name(stem):
+    slug = SLUGS.get(stem, stem)
+    version = VERSIONS.get(stem, "v1.0")
+    return f"equipe-6-{slug}-{version}.docx"
 
 
 def main():
     n = 0
-    # Artefacts de cadrage (nommage equipe-6 normalisé)
-    for src, out_name in OUTPUTS.items():
-        md = os.path.join(HERE, src)
-        if not os.path.isfile(md):
-            print(f"[SKIP] {src} introuvable")
-            continue
-        out = os.path.join(HERE, out_name)
+    # Tous les artefacts de cadrage (auto-découverts) -> nommage equipe-6
+    for md in sorted(glob.glob(os.path.join(HERE, "*.md"))):
+        stem = os.path.splitext(os.path.basename(md))[0]
+        out = os.path.join(HERE, out_name(stem))
         render(md, out)
         print(f"[OK] {os.path.relpath(out, HERE)}")
         n += 1
