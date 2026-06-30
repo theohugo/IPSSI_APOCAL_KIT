@@ -90,6 +90,7 @@ Il couvre l'ensemble de la semaine : le **MVP must-have F1–F6** (Release 1), l
 | **E10** | Qualité & exploitation | Tests cœur métier, ADR LLM, admin, observabilité | transverse | P2 |
 | **E11** | MVP2 / Expérience de révision | Dashboard, révision des erreurs, difficulté, explications | R2 | — |
 | **E12** | Feedback utilisateur | Notation des quiz, signalement, collecte de retours | R2 | — |
+| **E13** | Espace enseignant *(perturbation J1)* | Tableau de bord classe, repérage des décrocheurs, conseils ciblés | **R1** | P-J1 |
  
 ---
  
@@ -154,6 +155,18 @@ Il couvre l'ensemble de la semaine : le **MVP must-have F1–F6** (Release 1), l
 | US-F6.2 | En tant qu'étudiant, je veux **rouvrir un quiz passé** afin de revoir mes réponses. | 🟠 S | 2 | 🔧 `<pk>/` détail |
 | US-F6.3 | En tant qu'étudiant, je veux **filtrer/trier mon historique** (date, score, matière) afin de m'y retrouver. | 🟡 C | 3 | ⬜ |
  
+## E13 — Espace enseignant *(perturbation J1 — must R1)*
+
+> **Issu de la perturbation J1.** Le PO a repositionné l'enseignante (Mme Sophie Lefèvre) **cible primaire** : le suivi de classe entre donc dans le périmètre **must-have Release 1** (cf. [Personas](personas.md) §5, [Story Map](story-map.md) colonne 7, [Customer Journey](03_customer_journey_map.md)).
+
+| ID | User Story | MoSCoW | Pts | État code |
+|----|-----------|:------:|:---:|-----------|
+| US-T.1 | En tant qu'**enseignant·e**, je veux un **tableau de bord de ma classe** (scores et progression de mes étudiants) afin de suivre l'avancement. | 🔴 M | 5 | ⬜ |
+| US-T.2 | En tant qu'enseignant·e, je veux **repérer les décrocheurs en ≤ 3 clics** (tri/alerte sur scores faibles) afin d'intervenir tôt. | 🔴 M | 3 | ⬜ |
+| US-T.3 | En tant qu'enseignant·e, je veux **envoyer un conseil ciblé** à un étudiant en difficulté afin de l'aider sans quitter l'outil. | 🔴 M | 3 | ⬜ |
+
+> **Note** : l'enrichissement de cet espace (export, statistiques avancées) est porté par **US-R2.2** en Release 2 — voir §5.
+
 ## E7 — Sécurité & durcissement *(perturbation P3)*
  
 | ID | User Story | MoSCoW | Pts | État code |
@@ -213,7 +226,7 @@ Il couvre l'ensemble de la semaine : le **MVP must-have F1–F6** (Release 1), l
 | ID | Piste R2 | MoSCoW | Pts | État code | Note |
 |----|----------|:------:|:---:|:---------:|------|
 | US-R2.1 | **RAG renforcé** : génération ancrée chapitre par chapitre. | 🟡 C | 8 | 🔧 | différenciateur produit |
-| US-R2.2 | **Tableau de bord enseignant** : suivi de classe, export. | 🟡 C | 8 | ⬜ | cible *teacher-first* |
+| US-R2.2 | **Tableau de bord enseignant enrichi** : statistiques avancées, export (enrichit US-T.1). | 🟡 C | 8 | ⬜ | cible *teacher-first* |
 | US-R2.3 | **Niveaux de difficulté** des QCM (facile/moyen/difficile). | 🟡 C | 5 | ⬜ | engagement |
 | US-R2.4 | **Explications par réponse** afin de comprendre l'erreur. | 🟠 S | 5 | ⬜ | valeur pédagogique forte |
 | US-R2.5 | **Révision des erreurs** ciblée (rejouer ses ratés). | 🟠 S | 5 | ✅ kit | à recalibrer |
@@ -281,6 +294,7 @@ Vérification appliquée à toutes les stories must-have ; exemple sur **US-F3.1
 | Bloc | Must (🔴) | Should (🟠) | Could (🟡) | Total |
 |------|:--------:|:----------:|:---------:|:-----:|
 | **R1 — Parcours MVP** (E1–E6) | 40 | 12 | 6 | ~58 |
+| **R1 — Espace enseignant** (E13, J1) | 11 | — | — | ~11 |
 | **R1 — Transverse** (E7–E10) | 22 | 24 | 14 | ~60 |
 | **Spikes** | 13 | — | — | 13 |
 | **R2** (E11–E12) | — | 21 | 35 | ~56 |

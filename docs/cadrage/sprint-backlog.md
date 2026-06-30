@@ -31,7 +31,7 @@ Le **Sprint Backlog** décompose les user stories tirées du [Product Backlog](p
 | | |
 |---|---|
 | **Numéro** | Sprint 1 |
-| **Fenêtre** | Lundi 30/06/2026, 14h00 → 18h00 (4 h) |
+| **Fenêtre** | Lundi 29/06/2026, 14h00 → 18h00 (4 h) |
 | **Équipe** | 7 personnes |
 | **Capacité** | 7 × 4 h = **28 h-personnes** |
 | **Vélocité cible** | 13–16 SP (stories F1/F2 partielles) |

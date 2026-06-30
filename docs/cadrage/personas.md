@@ -64,7 +64,7 @@ Chaque persona indique les **user stories** qu'il justifie (traçabilité avec l
 - Uploader un PDF / coller du texte → **US-F2.1, US-F2.2**
 - Générer 10 QCM ancrés dans le cours → **US-F3.1, US-F3.5**
 - Voir son score /10 + le détail des erreurs → **US-F5.1, US-F5.2**
-- Rejouer ses erreurs et suivre sa progression → **US-F6.1, US-Q.1**
+- Rejouer ses erreurs et suivre sa progression → **US-F6.1, US-R2.5**
 - Garantie RGPD (LLM local) → contrainte transverse (E7)
 
 **Scénario type** : Lucas téléverse le PDF de son cours de Réseaux (45 pages), lance la génération, répond aux 10 QCM, obtient 7/10 et voit exactement les chapitres (routage OSPF) où il a échoué → il sait quoi revoir.
@@ -122,7 +122,7 @@ Chaque persona indique les **user stories** qu'il justifie (traçabilité avec l
 **Besoins → User stories**
 - Compte fiable, email vérifié, mot de passe récupérable → **US-F1.1 à US-F1.5**
 - Historique persistant (date, cours, score) → **US-F6.1, US-F6.2**
-- Rejouer un quiz ciblé sur ses erreurs → **US-Q.1** (should)
+- Rejouer un quiz ciblé sur ses erreurs → **US-R2.5** (should)
 - Garantie RGPD : LLM **local** (Ollama), aucune donnée envoyée au cloud → contrainte transverse (E7)
 
 **Scénario type** : Karim se connecte chaque dimanche, consulte ses scores des 3 dernières semaines, relance un quiz sur le chapitre où il plafonne à 5/10.
@@ -182,7 +182,7 @@ Chaque persona indique les **user stories** qu'il justifie (traçabilité avec l
 |---------|------|--------|--------------|
 | **Lucas Moreau** | Primaire (étudiant — réf. Customer Journey) | MVP F2/F3/F5/F6 | US-F2.x, US-F3.1, US-F3.5, US-F5.x, US-F6.1 |
 | **Léa** | Primaire (étudiant) | MVP F2/F3/F5/F6 | US-F2.x, US-F3.1, US-F5.x, US-F6.1 |
-| **Karim** | Primaire (étudiant) | MVP F1/F6 + RGPD | US-F1.x, US-F6.x, US-Q.1 |
+| **Karim** | Primaire (étudiant) | MVP F1/F6 + RGPD | US-F1.x, US-F6.x, US-R2.5 |
 | **Sophie Lefèvre** | Primaire (enseignante, perturbation J1) | MVP Espace enseignant + F3 | US-T.1, US-T.2, US-T.3, US-F3.1 |
 | **Thomas** | Anti-persona | Hors périmètre | US-W.x |
 
