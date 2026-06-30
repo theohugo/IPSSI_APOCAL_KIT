@@ -1,8 +1,21 @@
 # Personas — EduTutor IA
 
-> Artefact de cadrage Jour 1 — APOCAL'IPSSI 2026
+## 🗂️ Identification du document
+
+| | |
+|---|---|
+| **Équipe** | n° 6 |
+| **Membres** | Kahil MOKHTARI · Amine HADDANE · Souleymane FALL · Nikola MILOSAVLJEVIC · Dina CHAOUKI · Rayan ZEBAZE SAO · Hugo RAGUIN |
+| **Sprint concerné** | Cadrage |
+| **Artefact** | 2 sur 7 — Personas |
+| **Version** | v1.1 (mise à jour perturbation J1) |
+| **Date de remise** | 29/06/2026 |
+| **Statut** | Draft (à valider PO) |
+| **Rédacteur** | Hugo RAGUIN |
+| **Fichier** | `equipe-6-personas-v1.1` |
+
 > Produit : **EduTutor IA** — assistant IA de révision, *enseignant-first*, génération ancrée dans les cours (RAG) et 100 % local (Ollama, RGPD).
-> Liens : [Product Backlog](product-backlog.md) · [Perturbation J1 — Produit](perturbations/j1-produit.md).
+> Liens : [Product Vision Board](product-vision-board.md) · [Product Backlog](product-backlog.md) · [Perturbation J1 — Produit](perturbations/j1-produit.md).
 
 ---
 
@@ -141,6 +154,39 @@ Chaque persona indique les **user stories** qu'il justifie (traçabilité avec l
 | **Thomas** | Anti-persona | Hors périmètre | US-W.x |
 
 **À retenir pour le Product Owner** : depuis la perturbation J1, le **Sprint 1 sert deux cibles principales** — les étudiants (Léa, Karim) **et** l'enseignante (Mme Lefèvre). Les fonctionnalités de suivi de classe, autrefois en Release 2, font désormais partie du périmètre prioritaire.
+
+---
+
+---
+
+## ✅ Grille d'auto-évaluation
+
+| Critère qualité | Auto-éval | Commentaire / preuve |
+|---|:---:|---|
+| Chaque persona a un profil concret (âge, situation, aisance numérique, contexte) | ☑ Oui | Léa, Karim, Mme Lefèvre décrits en table profil + citation. |
+| Les objectifs et frustrations sont explicites | ☑ Oui | Sections « Objectifs » et « Frustrations » pour chaque persona. |
+| Chaque persona est tracé vers des user stories du backlog | ☑ Oui | « Besoins → User stories » (US-F1.x à US-T.3). |
+| Un anti-persona cadre le hors-périmètre | ☑ Oui | §5 Thomas (candidat concours généraliste) → US-W.x. |
+| La perturbation J1 est intégrée et tracée | ☑ Oui | Mme Sophie Lefèvre repositionnée primaire (§4) + lien perturbation J1. |
+| Une synthèse de priorisation oriente le PO | ☑ Oui | §6 table de synthèse + note d'arbitrage PO. |
+| Le document a été relu et validé par l'équipe | ☑ Oui | Revue d'équipe avant remise · validation PO en attente. |
+
+---
+
+## 📚 Références
+
+- Cours Agile/Scrum (Mohamed EL AFRIT) — mohamedelafrit.com/teaching/APOCALIPSSI
+- Alan Cooper — *The Inmates Are Running the Asylum* (méthode des personas)
+- Roman Pichler — personas & target groups (romanpichler.com)
+- Sources internes : [Product Vision Board](product-vision-board.md) · [Customer Journey Map](03_customer_journey_map.md) · [Perturbation J1](perturbations/j1-produit.md)
+
+---
+
+## 🔄 Convention de versionnement
+
+- **v1.0** — version initiale (cadrage matinal, 29/06/2026)
+- **v1.1** — intégration de la perturbation J1 : Mme Lefèvre repositionnée cible primaire
+- **v2.0** — révision majeure suite à une prochaine perturbation (changement de scope)
 
 ---
 
