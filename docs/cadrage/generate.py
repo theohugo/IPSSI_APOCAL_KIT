@@ -148,14 +148,32 @@ def render(md_path, docx_path):
     return docx_path
 
 
+# Mapping source Markdown -> nom de sortie .docx (convention APOCAL'IPSSI :
+# equipe-XX-nom-document-vY.Z.docx). La source de vérité reste le .md.
+OUTPUTS = {
+    "product-vision-board.md": "equipe-6-product-vision-board-v1.0.docx",
+    "personas.md": "equipe-6-personas-v1.2.docx",
+    "03_customer_journey_map.md": "equipe-6-customer-journey-map-v1.0.docx",
+    "product-backlog.md": "equipe-6-product-backlog-v1.0.docx",
+}
+
+
 def main():
-    targets = [os.path.join(HERE, "personas.md")]
-    targets += sorted(glob.glob(os.path.join(HERE, "perturbations", "*.md")))
     n = 0
-    for md in targets:
+    # Artefacts de cadrage (nommage equipe-6 normalisé)
+    for src, out_name in OUTPUTS.items():
+        md = os.path.join(HERE, src)
         if not os.path.isfile(md):
+            print(f"[SKIP] {src} introuvable")
             continue
-        out = os.path.splitext(md)[0] + ".docx"
+        out = os.path.join(HERE, out_name)
+        render(md, out)
+        print(f"[OK] {os.path.relpath(out, HERE)}")
+        n += 1
+    # Perturbations (préfixe equipe-6 ajouté au nom du fichier)
+    for md in sorted(glob.glob(os.path.join(HERE, "perturbations", "*.md"))):
+        base = os.path.splitext(os.path.basename(md))[0]
+        out = os.path.join(os.path.dirname(md), f"equipe-6-{base}.docx")
         render(md, out)
         print(f"[OK] {os.path.relpath(out, HERE)}")
         n += 1

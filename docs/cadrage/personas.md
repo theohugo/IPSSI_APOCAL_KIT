@@ -1,8 +1,21 @@
 # Personas — EduTutor IA
 
-> Artefact de cadrage Jour 1 — APOCAL'IPSSI 2026
+## 🗂️ Identification du document
+
+| | |
+|---|---|
+| **Équipe** | n° 6 |
+| **Membres** | Kahil MOKHTARI · Amine HADDANE · Souleymane FALL · Nikola MILOSAVLJEVIC · Dina CHAOUKI · Rayan ZEBAZE SAO · Hugo RAGUIN |
+| **Sprint concerné** | Cadrage |
+| **Artefact** | 2 sur 7 — Personas |
+| **Version** | v1.2 (perturbation J1 + persona Lucas pour cohérence Customer Journey) |
+| **Date de remise** | 29/06/2026 |
+| **Statut** | Draft (à valider PO) |
+| **Rédacteur** | Hugo RAGUIN |
+| **Fichier** | `equipe-6-personas-v1.2` |
+
 > Produit : **EduTutor IA** — assistant IA de révision, *enseignant-first*, génération ancrée dans les cours (RAG) et 100 % local (Ollama, RGPD).
-> Liens : [Product Backlog](product-backlog.md) · [Perturbation J1 — Produit](perturbations/j1-produit.md).
+> Liens : [Product Vision Board](product-vision-board.md) · [Product Backlog](product-backlog.md) · [Perturbation J1 — Produit](perturbations/j1-produit.md).
 
 ---
 
@@ -19,14 +32,46 @@ Ce document décrit les **utilisateurs cibles** d'EduTutor IA afin d'orienter le
 
 On distingue donc :
 
-- **Personas primaires** — pilotent le MVP. Deux usages : l'étudiant qui révise (F1–F6) **et** l'enseignante qui suit sa classe (Espace enseignant).
+- **Personas primaires** — pilotent le MVP. Deux usages : l'étudiant qui révise (F1–F6) **et** l'enseignante qui suit sa classe (Espace enseignant). Côté étudiant, trois profils : **Lucas** (persona de référence du [Customer Journey](03_customer_journey_map.md)), **Léa** et **Karim**.
 - **Anti-persona** — qui le produit **ne** vise **pas**, pour cadrer le périmètre.
 
 Chaque persona indique les **user stories** qu'il justifie (traçabilité avec le backlog).
 
 ---
 
-## 2. Persona primaire #1 — Léa, l'étudiante qui révise dans l'urgence
+## 2. Persona primaire #1 — Lucas Moreau, l'étudiant en informatique *(persona de référence du Customer Journey)*
+
+> Persona **de référence** retenu pour le [Customer Journey Map](03_customer_journey_map.md) : c'est son parcours qui y est détaillé de bout en bout.
+
+| | |
+|---|---|
+| **Âge / situation** | 21 ans, étudiant en L3 Informatique (Université Paris-Saclay) |
+| **Aisance numérique** | Élevée · révise seul sur un laptop Windows (8 Go RAM) · job étudiant le week-end |
+| **Contexte** | Révise avant les partiels, connexion Wi-Fi instable en résidence universitaire, budget nul pour les abonnements |
+| **Citation** | « Je veux des questions sur MON cours de Réseaux, pas du générique comme ChatGPT ou Quizlet. » |
+
+**Objectifs**
+- Transformer ses cours (PDF/texte) en quiz d'entraînement rapidement, sans effort de préparation.
+- Identifier ses lacunes par chapitre **avant** les partiels.
+- Réviser même avec une connexion instable, sans coût.
+
+**Frustrations**
+- ChatGPT « invente » des éléments hors de son cours ; Quizlet est trop générique.
+- Pas de retour clair sur la qualité d'extraction d'un PDF (tableaux, schémas).
+- Loader de génération sans information : ne sait pas si ça avance ou si ça a planté.
+
+**Besoins → User stories**
+- Uploader un PDF / coller du texte → **US-F2.1, US-F2.2**
+- Générer 10 QCM ancrés dans le cours → **US-F3.1, US-F3.5**
+- Voir son score /10 + le détail des erreurs → **US-F5.1, US-F5.2**
+- Rejouer ses erreurs et suivre sa progression → **US-F6.1, US-Q.1**
+- Garantie RGPD (LLM local) → contrainte transverse (E7)
+
+**Scénario type** : Lucas téléverse le PDF de son cours de Réseaux (45 pages), lance la génération, répond aux 10 QCM, obtient 7/10 et voit exactement les chapitres (routage OSPF) où il a échoué → il sait quoi revoir.
+
+---
+
+## 3. Persona primaire #2 — Léa, l'étudiante qui révise dans l'urgence
 
 | | |
 |---|---|
@@ -55,7 +100,7 @@ Chaque persona indique les **user stories** qu'il justifie (traçabilité avec l
 
 ---
 
-## 3. Persona primaire #2 — Karim, l'étudiant méthodique en reconversion
+## 4. Persona primaire #3 — Karim, l'étudiant méthodique en reconversion
 
 | | |
 |---|---|
@@ -84,7 +129,7 @@ Chaque persona indique les **user stories** qu'il justifie (traçabilité avec l
 
 ---
 
-## 4. Persona primaire #3 — Mme Sophie Lefèvre, l'enseignante qui pilote sa classe
+## 5. Persona primaire #4 — Mme Sophie Lefèvre, l'enseignante qui pilote sa classe
 
 > **Persona issue de la perturbation J1 (Produit).** Initialement présentée par le PO comme cible secondaire, elle est désormais **cible principale, au même niveau que l'étudiant**. Ses besoins remontent en conséquence dans le périmètre **must-have / Release 1** (voir [Perturbation J1](perturbations/j1-produit.md)).
 
@@ -120,7 +165,7 @@ Chaque persona indique les **user stories** qu'il justifie (traçabilité avec l
 
 ---
 
-## 5. Anti-persona — Thomas, le candidat à un concours généraliste
+## 6. Anti-persona — Thomas, le candidat à un concours généraliste
 
 | | |
 |---|---|
@@ -131,16 +176,51 @@ Chaque persona indique les **user stories** qu'il justifie (traçabilité avec l
 
 ---
 
-## 6. Synthèse priorisation
+## 7. Synthèse priorisation
 
 | Persona | Type | Pilote | Stories clés |
 |---------|------|--------|--------------|
+| **Lucas Moreau** | Primaire (étudiant — réf. Customer Journey) | MVP F2/F3/F5/F6 | US-F2.x, US-F3.1, US-F3.5, US-F5.x, US-F6.1 |
 | **Léa** | Primaire (étudiant) | MVP F2/F3/F5/F6 | US-F2.x, US-F3.1, US-F5.x, US-F6.1 |
 | **Karim** | Primaire (étudiant) | MVP F1/F6 + RGPD | US-F1.x, US-F6.x, US-Q.1 |
 | **Sophie Lefèvre** | Primaire (enseignante, perturbation J1) | MVP Espace enseignant + F3 | US-T.1, US-T.2, US-T.3, US-F3.1 |
 | **Thomas** | Anti-persona | Hors périmètre | US-W.x |
 
-**À retenir pour le Product Owner** : depuis la perturbation J1, le **Sprint 1 sert deux cibles principales** — les étudiants (Léa, Karim) **et** l'enseignante (Mme Lefèvre). Les fonctionnalités de suivi de classe, autrefois en Release 2, font désormais partie du périmètre prioritaire.
+**À retenir pour le Product Owner** : depuis la perturbation J1, le **Sprint 1 sert deux cibles principales** — les étudiants (Lucas, Léa, Karim) **et** l'enseignante (Mme Lefèvre). Les fonctionnalités de suivi de classe, autrefois en Release 2, font désormais partie du périmètre prioritaire.
+
+---
+
+---
+
+## ✅ Grille d'auto-évaluation
+
+| Critère qualité | Auto-éval | Commentaire / preuve |
+|---|:---:|---|
+| Chaque persona a un profil concret (âge, situation, aisance numérique, contexte) | ☑ Oui | Léa, Karim, Mme Lefèvre décrits en table profil + citation. |
+| Les objectifs et frustrations sont explicites | ☑ Oui | Sections « Objectifs » et « Frustrations » pour chaque persona. |
+| Chaque persona est tracé vers des user stories du backlog | ☑ Oui | « Besoins → User stories » (US-F1.x à US-T.3). |
+| Un anti-persona cadre le hors-périmètre | ☑ Oui | §5 Thomas (candidat concours généraliste) → US-W.x. |
+| La perturbation J1 est intégrée et tracée | ☑ Oui | Mme Sophie Lefèvre repositionnée primaire (§4) + lien perturbation J1. |
+| Une synthèse de priorisation oriente le PO | ☑ Oui | §6 table de synthèse + note d'arbitrage PO. |
+| Le document a été relu et validé par l'équipe | ☑ Oui | Revue d'équipe avant remise · validation PO en attente. |
+
+---
+
+## 📚 Références
+
+- Cours Agile/Scrum (Mohamed EL AFRIT) — mohamedelafrit.com/teaching/APOCALIPSSI
+- Alan Cooper — *The Inmates Are Running the Asylum* (méthode des personas)
+- Roman Pichler — personas & target groups (romanpichler.com)
+- Sources internes : [Product Vision Board](product-vision-board.md) · [Customer Journey Map](03_customer_journey_map.md) · [Perturbation J1](perturbations/j1-produit.md)
+
+---
+
+## 🔄 Convention de versionnement
+
+- **v1.0** — version initiale (cadrage matinal, 29/06/2026)
+- **v1.1** — intégration de la perturbation J1 : Mme Lefèvre repositionnée cible primaire
+- **v1.2** — ajout du persona Lucas Moreau (cohérence avec le Customer Journey Map)
+- **v2.0** — révision majeure suite à une prochaine perturbation (changement de scope)
 
 ---
 

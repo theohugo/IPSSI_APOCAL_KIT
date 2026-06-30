@@ -1,13 +1,26 @@
 # Customer Journey Map — EduTutor IA
 
-**Projet :** APOCAL'IPSSI 2026
-**Équipe :** Groupe 6
-**Auteur :** Kahil MOKHTARI
-**Date :** 29 juin 2026
+## 🗂️ Identification du document
+
+| | |
+|---|---|
+| **Équipe** | n° 6 |
+| **Membres** | Kahil MOKHTARI · Amine HADDANE · Souleymane FALL · Nikola MILOSAVLJEVIC · Dina CHAOUKI · Rayan ZEBAZE SAO · Hugo RAGUIN |
+| **Sprint concerné** | Cadrage |
+| **Artefact** | 3 sur 7 — Customer Journey Map |
+| **Version** | v1.0 |
+| **Date de remise** | 29/06/2026 |
+| **Statut** | Draft (à valider PO) |
+| **Rédacteur** | Kahil MOKHTARI |
+| **Fichier** | `equipe-6-customer-journey-map-v1.0` |
+
+> Liens : [Product Vision Board](product-vision-board.md) · [Personas](personas.md) · [Perturbation J1 — Produit](perturbations/j1-produit.md).
 
 ---
 
 ## Persona de référence — Lucas Moreau (cible primaire imposée)
+
+> Persona décrit dans les [Personas](personas.md) — §2, Persona primaire #1.
 
 **Profil :** 21 ans, L3 Informatique, Université Paris-Saclay. Job étudiant le week-end, révise seul sur son laptop Windows (8 Go RAM). Budget nul pour les abonnements. Utilise actuellement ChatGPT (limité) et Quizlet (trop générique). Connexion Wi-Fi instable en résidence universitaire.
 
@@ -149,9 +162,11 @@
 
 ---
 
-## Persona secondaire — Mme Isabelle Lefèvre (enseignante)
+## Parcours cible primaire #2 — Mme Sophie Lefèvre (enseignante)
 
 *Émerge via la Perturbation J1 — lundi 14h*
+
+> **Cohérence cadrage.** Suite à la perturbation J1, le PO a repositionné Mme Lefèvre **cible primaire au même niveau que l'étudiant** (cf. [Personas](personas.md) et [Product Vision Board](product-vision-board.md)). Son parcours est donc traité ici comme un parcours primaire, et non plus secondaire.
 
 **Profil :** 42 ans, Enseignante en BTS Communication, Lyon. Responsable d'une classe de 28 élèves. Prépare ses évaluations manuellement (3h pour 10 questions). Besoin principal : suivre la progression de sa classe et repérer les élèves décrocheurs. Exige que les données de ses élèves restent dans l'établissement.
 
@@ -168,3 +183,37 @@
 - Modèle `QuestionReport` pour signaler les erreurs factuelles
 - Export des questions (Word, PDF)
 - Gestion de cohorte / partage avec des étudiants
+
+---
+
+## ✅ Grille d'auto-évaluation
+
+| Critère qualité | Auto-éval | Commentaire / preuve |
+|---|:---:|---|
+| Le parcours suit des étapes claires de bout en bout | ☑ Oui | 5 étapes : Découverte → Inscription → Premier quiz → Usage régulier → Reco/Abandon. |
+| Chaque étape couvre actions, pensées, émotions et frictions | ☑ Oui | Tables détaillées par étape (+ sous-étapes 3a/3b/3c). |
+| Les opportunités d'amélioration sont identifiées | ☑ Oui | Ligne « Opportunité » à chaque étape. |
+| Les frictions sont priorisées pour le MVP | ☑ Oui | Table de synthèse F1–F8 (Oui/Non MVP). |
+| Le parcours est ancré dans le code réel (pages, composants) | ☑ Oui | Références `SignupPage.tsx`, `UploadPage.tsx`, `QuizPage.tsx`, etc. |
+| La perturbation J1 (enseignante) est intégrée et cohérente | ☑ Oui | Parcours Mme **Sophie** Lefèvre, repositionnée primaire (note de cohérence). |
+| Le document a été relu et validé par l'équipe | ☑ Oui | Revue d'équipe avant remise · validation PO en attente. |
+
+---
+
+## 📚 Références
+
+- Cours Agile/Scrum (Mohamed EL AFRIT) — mohamedelafrit.com/teaching/APOCALIPSSI
+- Nielsen Norman Group — *Customer Journey Mapping* (méthode)
+- Sources internes : [Product Vision Board](product-vision-board.md) · [Personas](personas.md) · [Perturbation J1](perturbations/j1-produit.md)
+
+---
+
+## 🔄 Convention de versionnement
+
+- **v1.0** — version initiale produite lors du cadrage (29/06/2026)
+- **v1.x** — révisions mineures après revue PO ou retours utilisateurs
+- **v2.0** — révision majeure suite à une perturbation (changement de scope)
+
+---
+
+*Document vivant — à affiner après les premiers retours utilisateurs.*
