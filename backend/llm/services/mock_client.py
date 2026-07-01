@@ -5,6 +5,7 @@ Génère 10 questions plausibles à partir des premiers mots du source_text.
 Activé via : LLM_BACKEND=mock dans le .env
 """
 
+import hashlib
 import random
 
 from .base import LLMClient
@@ -14,8 +15,12 @@ class MockLLMClient(LLMClient):
     """Génère des QCM déterministes (seed sur le texte) — pour tests."""
 
     def generate_quiz(self, source_text: str, title: str) -> list[dict]:
-        # Seed déterministe — même texte → mêmes QCM (utile en tests)
-        rng = random.Random(hash(source_text) % 2**31)
+        # Seed déterministe — même texte → mêmes QCM (utile en tests).
+        # NB : on utilise sha256 (et non hash()) car hash() sur str dépend de
+        # PYTHONHASHSEED et varie donc d'un process à l'autre : le mock ne serait
+        # plus reproductible entre deux exécutions (bug de non-déterminisme).
+        digest = hashlib.sha256(source_text.encode("utf-8")).digest()
+        rng = random.Random(int.from_bytes(digest[:8], "big"))
         words = [w for w in source_text.split() if len(w) > 3][:30]
         if not words:
             words = ["concept", "notion", "élément", "principe", "exemple", "définition"]

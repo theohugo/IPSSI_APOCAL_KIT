@@ -8,9 +8,9 @@
 | **Membres** | Kahil MOKHTARI · Amine HADDANE · Souleymane FALL · Nikola MILOSAVLJEVIC · Dina CHAOUKI · Rayan ZEBAZE SAO · Hugo RAGUIN |
 | **Sprint concerné** | Sprint 3 (mardi 14h-18h) |
 | **Artefact** | Perturbation J2 — Benchmark + décision |
-| **Version** | v1.0 |
+| **Version** | v1.1 |
 | **Date** | 30/06/2026 |
-| **Statut** | Draft (benchmark à exécuter) |
+| **Statut** | ✅ Validé (benchmark exécuté le 30/06/2026 — ADR-0001 accepté) |
 | **Rédacteur** | Kahil MOKHTARI |
 
 > Liens : [ADR-0001 — Choix du modèle LLM](../cadrage/adr/adr-0001-choix-modele-llm.md) · [Sprint Backlog](../cadrage/sprint-backlog.md) · [Release Planning](../cadrage/release-planning.md).
@@ -59,7 +59,7 @@ python manage.py bench_llm \
 python manage.py bench_llm --runs 5 --specs mistral:mistral-small-latest
 ```
 
-> ✅ Harnais validé en mode `mock` (smoke test : 10/10 questions, tableau généré). Il reste à l'exécuter sur une machine avec **Ollama + modèles** (poste de Souleymane) pour obtenir les **vrais chiffres** ci-dessous — copier-coller la sortie de `bench_llm` dans le tableau §3.
+> ✅ Harnais validé en mode `mock` (smoke test : 10/10 questions, tableau généré) **puis exécuté** le 30/06/2026 sur machine équipée (Ollama + modèles, i5-11400F / RTX 5070). Les **chiffres réels** sont reportés au tableau §3 ; sortie brute archivée dans [`j2/bench-results.txt`](j2/bench-results.txt).
 
 ---
 
