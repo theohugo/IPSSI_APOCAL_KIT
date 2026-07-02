@@ -22,6 +22,14 @@ export default function Layout() {
 
   return (
     <div className="min-h-screen flex flex-col">
+      {/* Lien d'évitement — RGAA 12.7 / WCAG 2.4.1 */}
+      <a
+        href="#main-content"
+        className="sr-only focus:not-sr-only focus:absolute focus:top-2 focus:left-2 focus:z-50 focus:px-4 focus:py-2 focus:bg-indigo-600 focus:text-white focus:rounded focus:font-medium"
+      >
+        Aller au contenu principal
+      </a>
+
       {/* Header */}
       <header className="bg-white border-b border-slate-200 sticky top-0 z-10 backdrop-blur">
         <div className="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
@@ -101,7 +109,7 @@ export default function Layout() {
       {/* Bandeau d'invitation à confirmer l'email (validation "soft") */}
       <VerifyEmailBanner />
 
-      <main className="flex-1 max-w-6xl mx-auto w-full px-4 py-8">
+      <main id="main-content" className="flex-1 max-w-6xl mx-auto w-full px-4 py-8">
         <Outlet />
       </main>
 
