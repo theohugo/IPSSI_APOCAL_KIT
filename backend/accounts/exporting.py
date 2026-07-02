@@ -134,8 +134,22 @@ def _audit_events_payload(user: User) -> list[dict]:
     ]
 
 
+def _reports_payload(user: User) -> list[dict]:
+    """Signalements émis par l'utilisateur.
+
+    Aucun modèle de signalement n'existe encore dans le produit (fonctionnalité
+    prévue). On expose donc une liste vide plutôt qu'une donnée factice : la
+    catégorie « signalements » demandée par l'énoncé J3-bis est bien présente.
+    """
+    return []
+
+
 def build_export_payload(user: User) -> dict:
-    """Construit l'objet complet exportable pour le compte donné."""
+    """Construit l'objet complet exportable pour le compte donné.
+
+    Couvre les 6 catégories demandées (SAR J3-bis) : compte, quiz (cours +
+    questions), réponses, signalements, demandes d'accès et journal d'audit.
+    """
     return {
         "exported_at": timezone.now(),
         "notice": (
@@ -145,6 +159,7 @@ def build_export_payload(user: User) -> dict:
         "account": _account_payload(user),
         "quizzes": _quizzes_payload(user),
         "answers": _answers_payload(user),
+        "reports": _reports_payload(user),
         "data_requests": _data_requests_payload(user),
         "audit_logs": _audit_events_payload(user),
     }

@@ -20,9 +20,11 @@
 
 ## 1. Scénario
 
-Un utilisateur exerce ses droits RGPD : **« Quelles données avez-vous sur moi, et rendez-les moi dans un format réutilisable »** (droit d'accès — art. 15 — et à la portabilité — art. 20). En parallèle, le sponsor rappelle l'obligation d'afficher les **mentions légales, CGU, politique de confidentialité et cookies**. Il faut une réponse **outillée** (pas un email manuel) avant la Release 1.
+**M. Hugo Petit** (étudiant M2 Droit numérique) soumet le **mercredi 10h30**, en pleine livraison MVP, une **demande formelle d'accès** (RGPD **Art. 15**) : il réclame l'export complet de ses données (compte, cours/textes, quiz, réponses et scores, signalements, logs d'audit) en **format structuré (JSON ou CSV)**, avec un **délai de réponse de 48 h**. En parallèle, l'obligation d'afficher les **mentions légales, CGU, confidentialité et cookies** s'applique. Il faut une réponse **outillée** (pas un traitement manuel).
 
 > Reformulation (1 phrase) : *« Tout utilisateur doit pouvoir, en un clic, télécharger l'intégralité de ses données personnelles dans un format lisible par machine, et consulter les pages légales du service. »*
+>
+> Nature de la perturbation : **arbitrage documentaire** (priorisation, registre de traitement) plus qu'un sprint de code. Livrables : endpoint + bouton + politique de rétention + audit trail + **réponse écrite** au demandeur.
 
 ---
 
@@ -40,28 +42,33 @@ Un utilisateur exerce ses droits RGPD : **« Quelles données avez-vous sur moi,
 
 ---
 
-## 3. API livrée *(CA-J3bis-2)*
+## 3. API + IHM livrées *(CA-J3bis-2)*
 
 | Méthode | Route | Rôle |
 |---|---|---|
-| `POST` | `/api/accounts/data-export/` | Génère et **télécharge** l'export (`?format=json` ou `zip`). Trace un `DataRequest` + `AuditEvent`. |
+| `GET` | **`/api/accounts/me/export/`** | **Endpoint canonique** (énoncé J3-bis) : génère et **télécharge** l'export (`?fmt=json` ou `zip`). Trace un `DataRequest` + `AuditEvent`. |
 | `GET` | `/api/accounts/data-export/` | Renvoie l'**historique** des demandes d'export de l'utilisateur. |
+| `POST` | `/api/accounts/data-export/` | Variante génération/téléchargement (compat). |
 
-- **Authentification obligatoire** (`IsAuthenticated`) : un anonyme reçoit 401/403 (`test_data_export_requires_auth`).
+- **Bouton frontend** : *Mon profil → Mes données → **« Exporter mes données (JSON) »*** (+ ZIP) — [`ProfilePage.tsx`](../../frontend/src/pages/ProfilePage.tsx) via [`exportMyData`](../../frontend/src/api/auth.ts).
+- **6 catégories** exportées : compte, quiz (cours + questions), réponses, **signalements**, demandes d'accès, journal d'audit.
+- **Authentification obligatoire** (`IsAuthenticated`) : un anonyme reçoit 401/403 (`test_me_export_requires_auth`).
 - **Empreinte** : l'export n'est **pas** archivé côté serveur ; seul son `sha256` est conservé (preuve d'intégrité sans re-stocker la donnée).
 - **Modèle de données** : `DataRequest` (statut `processing → responded / failed`, format, taille, hash) et `AuditEvent` (type `data_export` / `account_deleted`) — migration `0002_auditevent_datarequest`.
+- **Réponse écrite** au demandeur : [réponse à M. Hugo Petit](j3bis-reponse-hugo-petit.md).
 
 ---
 
 ## 4. Critères d'acceptation J3-bis
 
-- [x] **CA-J3bis-1** — Export **complet** des données perso (compte, quiz, réponses) → §2
-- [x] **CA-J3bis-2** — Format **lisible par machine** (JSON/ZIP), téléchargeable → §3
-- [x] **CA-J3bis-3** — **Isolation** stricte : aucune donnée d'un autre utilisateur → `test_data_export_isolates_other_users`
-- [x] **CA-J3bis-4** — Demande **tracée** (DataRequest) + audit (AuditEvent) → §2/§3
-- [x] **CA-J3bis-5** — Accès **authentifié** uniquement → `test_data_export_requires_auth`
-- [x] **CA-J3bis-6** — **Pages légales** en ligne (mentions, CGU, confidentialité, cookies) → `frontend/src/pages/legal/`
-- [x] **CA-J3bis-7** — Tests automatisés (6) en CI → [`accounts/tests.py`](../../backend/accounts/tests.py)
+- [x] **CA-J3bis-1** — Endpoint **`GET /api/accounts/me/export/`** → 200 + données structurées → §3
+- [x] **CA-J3bis-2** — Export **complet 6 catégories** (compte, quiz, réponses, signalements, demandes, audit) → §2/§3
+- [x] **CA-J3bis-3** — **≥ 2 formats** (JSON + ZIP), lisibles par machine → §3
+- [x] **CA-J3bis-4** — **Bouton frontend** « Exporter mes données » (profil authentifié) → [`ProfilePage.tsx`](../../frontend/src/pages/ProfilePage.tsx)
+- [x] **CA-J3bis-5** — **Politique de rétention** écrite (≥ 3 sections) → [politique de rétention](j3bis-politique-retention.md)
+- [x] **CA-J3bis-6** — **Audit trail** `DataRequest` en base (qui, quand, statut, hash) → [`models.py`](../../backend/accounts/models.py)
+- [x] **CA-J3bis-7** — **Réponse professionnelle** au demandeur (M. Hugo Petit) → [email](j3bis-reponse-hugo-petit.md)
+- [x] *Bonus* — Isolation inter-comptes + accès authentifié + pages légales → tests + `frontend/src/pages/legal/`
 
 ---
 

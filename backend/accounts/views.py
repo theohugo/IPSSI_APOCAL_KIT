@@ -319,16 +319,118 @@ class ChangePasswordView(APIView):
 # ---------------------------------------------------------------------------
 
 
-class DataExportView(APIView):
-    """Export RGPD des données personnelles de l'utilisateur connecté.
+def _perform_export(user, output_format: str):
+    """Génère l'export, trace la demande (`DataRequest` + `AuditEvent`) et renvoie
+    l'artefact. Le fichier n'est JAMAIS archivé côté serveur (seul le SHA-256 est
+    conservé).
 
-    GET  /api/accounts/data-export/  — historique de ses demandes d'export (JSON)
+    Raises:
+        ValueError: si le format demandé n'est pas supporté (avant toute trace).
+    """
+    if output_format not in SUPPORTED_FORMATS:
+        raise ValueError(output_format)
+
+    data_request = DataRequest.objects.create(
+        requester=user,
+        requested_format=output_format,
+        status=DataRequest.Status.PROCESSING,
+    )
+    try:
+        artifact = build_export_artifact(user, output_format)
+    except Exception as exc:  # pragma: no cover - garde-fou
+        data_request.status = DataRequest.Status.FAILED
+        data_request.error_message = str(exc)[:500]
+        data_request.save(update_fields=["status", "error_message"])
+        logger.exception("Échec de l'export RGPD pour user id=%s", user.pk)
+        raise
+
+    data_request.status = DataRequest.Status.RESPONDED
+    data_request.responded_at = timezone.now()
+    data_request.export_sha256 = artifact.sha256_hex
+    data_request.export_filename = artifact.filename
+    data_request.response_size = len(artifact.content)
+    data_request.save(
+        update_fields=[
+            "status",
+            "responded_at",
+            "export_sha256",
+            "export_filename",
+            "response_size",
+        ]
+    )
+    record_event(
+        user,
+        AuditEvent.Type.DATA_EXPORT,
+        message=f"Export RGPD ({output_format}) généré.",
+        sha256=artifact.sha256_hex,
+        size=len(artifact.content),
+    )
+    return artifact
+
+
+def _export_file_response(artifact):
+    """Enveloppe l'artefact dans une réponse HTTP téléchargeable (pièce jointe)."""
+    response = HttpResponse(artifact.content, content_type=artifact.content_type)
+    response["Content-Disposition"] = f'attachment; filename="{artifact.filename}"'
+    response["X-Export-SHA256"] = artifact.sha256_hex
+    return response
+
+
+def _resolve_format(request) -> str:
+    """Format d'export demandé.
+
+    Côté query on lit `fmt` (et PAS `format`) : `format` est un paramètre
+    réservé par DRF (négociation de renderer) qui renverrait 404 pour une
+    valeur sans renderer (ex. `zip`). Côté body (POST) on accepte `format`.
+    """
+    body_fmt = (
+        request.data.get("format") if isinstance(getattr(request, "data", None), dict) else None
+    )
+    return str(body_fmt or request.query_params.get("fmt") or "json").lower()
+
+
+class MeExportView(APIView):
+    """Export SAR (RGPD art. 15/20) — endpoint canonique de la perturbation J3-bis.
+
+    GET /api/accounts/me/export/?fmt=json|zip — génère et télécharge l'export
+    complet des données personnelles de l'utilisateur connecté.
+
+    [Note pédagogique] L'énoncé J3-bis demande explicitement un `GET
+    /api/accounts/me/export/`. Le GET produit ici un effet de bord assumé (trace
+    de la demande), conforme à l'exigence « répondre à une demande d'accès ».
+    """
+
+    permission_classes = [IsAuthenticated]
+
+    @extend_schema(
+        responses={200: OpenApiResponse(description="Fichier d'export (application/json ou zip)")}
+    )
+    def get(self, request):
+        output_format = _resolve_format(request)
+        try:
+            artifact = _perform_export(request.user, output_format)
+        except ValueError:
+            return Response(
+                {"detail": f"Format non supporté. Choix : {', '.join(SUPPORTED_FORMATS)}."},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+        except Exception:  # pragma: no cover - garde-fou
+            return Response(
+                {"detail": "La génération de l'export a échoué."},
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            )
+        return _export_file_response(artifact)
+
+
+class DataExportView(APIView):
+    """Historique + génération de l'export (compat).
+
+    GET  /api/accounts/data-export/  — historique des demandes d'export (JSON)
     POST /api/accounts/data-export/  — génère et télécharge l'export (JSON ou ZIP)
 
-    [Note pédagogique] Droit d'accès (RGPD art. 15) et portabilité (art. 20) :
-    l'utilisateur récupère TOUTES ses données dans un format lisible par machine.
-    On trace chaque demande dans `DataRequest` (+ un `AuditEvent`) sans jamais
-    archiver le fichier côté serveur — on stocke seulement son empreinte SHA-256.
+    L'endpoint canonique attendu par l'énoncé J3-bis est `GET
+    /api/accounts/me/export/` (voir `MeExportView`) ; cette vue conserve
+    l'historique et une variante POST.
     """
 
     permission_classes = [IsAuthenticated]
@@ -342,55 +444,17 @@ class DataExportView(APIView):
         responses={200: OpenApiResponse(description="Fichier d'export (application/json ou zip)")}
     )
     def post(self, request):
-        output_format = str(
-            request.data.get("format") or request.query_params.get("format") or "json"
-        ).lower()
-        if output_format not in SUPPORTED_FORMATS:
+        output_format = _resolve_format(request)
+        try:
+            artifact = _perform_export(request.user, output_format)
+        except ValueError:
             return Response(
                 {"detail": f"Format non supporté. Choix : {', '.join(SUPPORTED_FORMATS)}."},
                 status=status.HTTP_400_BAD_REQUEST,
             )
-
-        data_request = DataRequest.objects.create(
-            requester=request.user,
-            requested_format=output_format,
-            status=DataRequest.Status.PROCESSING,
-        )
-        try:
-            artifact = build_export_artifact(request.user, output_format)
-        except Exception as exc:  # pragma: no cover - garde-fou
-            data_request.status = DataRequest.Status.FAILED
-            data_request.error_message = str(exc)[:500]
-            data_request.save(update_fields=["status", "error_message"])
-            logger.exception("Échec de l'export RGPD pour user id=%s", request.user.pk)
+        except Exception:  # pragma: no cover - garde-fou
             return Response(
                 {"detail": "La génération de l'export a échoué."},
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR,
             )
-
-        data_request.status = DataRequest.Status.RESPONDED
-        data_request.responded_at = timezone.now()
-        data_request.export_sha256 = artifact.sha256_hex
-        data_request.export_filename = artifact.filename
-        data_request.response_size = len(artifact.content)
-        data_request.save(
-            update_fields=[
-                "status",
-                "responded_at",
-                "export_sha256",
-                "export_filename",
-                "response_size",
-            ]
-        )
-        record_event(
-            request.user,
-            AuditEvent.Type.DATA_EXPORT,
-            message=f"Export RGPD ({output_format}) généré.",
-            sha256=artifact.sha256_hex,
-            size=len(artifact.content),
-        )
-
-        response = HttpResponse(artifact.content, content_type=artifact.content_type)
-        response["Content-Disposition"] = f'attachment; filename="{artifact.filename}"'
-        response["X-Export-SHA256"] = artifact.sha256_hex
-        return response
+        return _export_file_response(artifact)
