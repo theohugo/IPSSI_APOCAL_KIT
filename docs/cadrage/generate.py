@@ -156,7 +156,7 @@ SLUGS = {
 }
 # Version par artefact (v1.0 par défaut).
 VERSIONS = {
-    "personas": "v1.2",
+    "personas": "v1.3",
 }
 
 
