@@ -38,15 +38,21 @@ export default function UploadPage() {
       </p>
 
       {error && (
-        <div className="mb-4 p-3 bg-rose-50 border-l-4 border-rose-500 text-sm text-rose-900 rounded">
+        <div
+          role="alert"
+          className="mb-4 p-3 bg-rose-50 border-l-4 border-rose-500 text-sm text-rose-900 rounded"
+        >
           {error}
         </div>
       )}
 
       <form onSubmit={handleSubmit} className="card space-y-4">
         <div>
-          <label className="block text-sm font-medium text-slate-700 mb-1">Titre du cours</label>
+          <label htmlFor="quiz-title" className="block text-sm font-medium text-slate-700 mb-1">
+            Titre du cours
+          </label>
           <input
+            id="quiz-title"
             type="text"
             required
             value={title}
@@ -57,9 +63,10 @@ export default function UploadPage() {
         </div>
 
         <div>
-          <div className="flex gap-2 mb-3">
+          <div role="group" aria-label="Mode de saisie" className="flex gap-2 mb-3">
             <button
               type="button"
+              aria-pressed={mode === 'text'}
               onClick={() => setMode('text')}
               className={`px-3 py-1 rounded text-sm font-medium ${
                 mode === 'text'
@@ -71,6 +78,7 @@ export default function UploadPage() {
             </button>
             <button
               type="button"
+              aria-pressed={mode === 'pdf'}
               onClick={() => setMode('pdf')}
               className={`px-3 py-1 rounded text-sm font-medium ${
                 mode === 'pdf'
