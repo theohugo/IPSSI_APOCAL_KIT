@@ -12,7 +12,7 @@ from django.contrib.auth.password_validation import validate_password as django_
 from django.core.exceptions import ValidationError as DjangoValidationError
 from rest_framework import serializers
 
-from .models import get_or_create_profile
+from .models import DataRequest, get_or_create_profile
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -229,3 +229,26 @@ class DeleteAccountSerializer(serializers.Serializer):
         if not user.check_password(value):
             raise serializers.ValidationError("Mot de passe incorrect.")
         return value
+
+
+# ---------------------------------------------------------------------------
+# Perturbation J3-bis (SAR RGPD) : historique des demandes d'accès
+# ---------------------------------------------------------------------------
+
+
+class DataRequestSerializer(serializers.ModelSerializer):
+    """Lecture seule : l'historique des demandes d'export d'un utilisateur."""
+
+    class Meta:
+        model = DataRequest
+        fields = [
+            "id",
+            "requested_at",
+            "status",
+            "requested_format",
+            "responded_at",
+            "export_sha256",
+            "export_filename",
+            "response_size",
+        ]
+        read_only_fields = fields
