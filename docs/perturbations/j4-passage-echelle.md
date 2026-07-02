@@ -105,7 +105,7 @@ Les courbes (et l'**impact chiffré des perturbations** sur le périmètre) sont
 - [x] **CA-J4-3** — Chaque risque prioritaire → **action préventive estimée au backlog** → §4
 - [x] **CA-J4-4** — **Burndown + burnup** actualisés, impact des perturbations chiffré → [doc dédié](../cadrage/j4-burndown-burnup.md)
 - [x] **CA-J4-5** — **Historique** des sprints conservé + prochain sprint défini → [Release Planning](../cadrage/release-planning.md)
-- [ ] **CA-J4-6** — *Bonus* — PoC technique (ADR migration scalable / amorce i18n)
+- [x] **CA-J4-6** — *Bonus* — PoC technique (ADR migration scalable / amorce i18n) → [ADR-0003](../cadrage/adr/adr-0003-migration-scalable.md)
 
 ---
 
@@ -119,6 +119,7 @@ Les courbes (et l'**impact chiffré des perturbations** sur le périmètre) sont
 | Actions préventives estimées au backlog | ☑ Oui | §4 (9 US, épics E14–E16). |
 | Impact des perturbations chiffré | ☑ Oui | burnup (+68 pts J4). |
 | Historique conservé + prochain sprint | ☑ Oui | release planning. |
+| *Bonus* ADR migration scalable (CA-J4-6) | ☑ Oui | [ADR-0003](../cadrage/adr/adr-0003-migration-scalable.md) — 4 composants, plan incrémental 4 phases. |
 
 ---
 
