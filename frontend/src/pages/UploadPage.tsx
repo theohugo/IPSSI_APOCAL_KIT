@@ -91,23 +91,38 @@ export default function UploadPage() {
           </div>
 
           {mode === 'text' ? (
-            <textarea
-              required
-              rows={10}
-              minLength={200}
-              value={sourceText}
-              onChange={(e) => setSourceText(e.target.value)}
-              placeholder="Collez ici le texte de votre cours (au moins 200 caractères)…"
-              className="input"
-            />
+            <div>
+              <label
+                htmlFor="source-text"
+                className="block text-sm font-medium text-slate-700 mb-1"
+              >
+                Texte du cours
+              </label>
+              <textarea
+                id="source-text"
+                required
+                rows={10}
+                minLength={200}
+                value={sourceText}
+                onChange={(e) => setSourceText(e.target.value)}
+                placeholder="Collez ici le texte de votre cours (au moins 200 caractères)…"
+                className="input"
+              />
+            </div>
           ) : (
-            <input
-              type="file"
-              accept=".pdf,application/pdf"
-              required
-              onChange={(e) => setPdf(e.target.files?.[0] ?? null)}
-              className="input"
-            />
+            <div>
+              <label htmlFor="source-pdf" className="block text-sm font-medium text-slate-700 mb-1">
+                PDF du cours
+              </label>
+              <input
+                id="source-pdf"
+                type="file"
+                accept=".pdf,application/pdf"
+                required
+                onChange={(e) => setPdf(e.target.files?.[0] ?? null)}
+                className="input"
+              />
+            </div>
           )}
           {mode === 'text' && (
             <p className="text-xs text-slate-500 mt-1">
