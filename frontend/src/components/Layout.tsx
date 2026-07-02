@@ -61,7 +61,9 @@ export default function Layout() {
                     Admin
                   </Link>
                 )}
-                <span aria-hidden="true" className="text-slate-500">|</span>
+                <span aria-hidden="true" className="text-slate-500">
+                  |
+                </span>
                 <Link
                   to="/profile"
                   className="text-slate-600 hover:text-indigo-600 hidden sm:inline"
