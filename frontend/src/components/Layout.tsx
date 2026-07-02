@@ -22,6 +22,14 @@ export default function Layout() {
 
   return (
     <div className="min-h-screen flex flex-col">
+      {/* Lien d'évitement — RGAA 12.7 / WCAG 2.4.1 */}
+      <a
+        href="#main-content"
+        className="sr-only focus:not-sr-only focus:absolute focus:top-2 focus:left-2 focus:z-50 focus:px-4 focus:py-2 focus:bg-indigo-600 focus:text-white focus:rounded focus:font-medium"
+      >
+        Aller au contenu principal
+      </a>
+
       {/* Header */}
       <header className="bg-white border-b border-slate-200 sticky top-0 z-10 backdrop-blur">
         <div className="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
@@ -35,7 +43,7 @@ export default function Layout() {
             </span>
           </Link>
 
-          <nav className="flex items-center gap-4 text-sm">
+          <nav aria-label="Navigation principale" className="flex items-center gap-4 text-sm">
             {user ? (
               <>
                 <Link to="/upload" className="text-slate-700 hover:text-indigo-600">
@@ -61,7 +69,9 @@ export default function Layout() {
                     Admin
                   </Link>
                 )}
-                <span className="text-slate-500">|</span>
+                <span aria-hidden="true" className="text-slate-500">
+                  |
+                </span>
                 <Link
                   to="/profile"
                   className="text-slate-600 hover:text-indigo-600 hidden sm:inline"
@@ -99,14 +109,14 @@ export default function Layout() {
       {/* Bandeau d'invitation à confirmer l'email (validation "soft") */}
       <VerifyEmailBanner />
 
-      <main className="flex-1 max-w-6xl mx-auto w-full px-4 py-8">
+      <main id="main-content" className="flex-1 max-w-6xl mx-auto w-full px-4 py-8">
         <Outlet />
       </main>
 
       <footer className="border-t border-slate-200 mt-12">
         <div className="max-w-6xl mx-auto px-4 py-6 space-y-3 text-sm text-slate-500">
           {/* Liens légaux (pages à compléter par les étudiants) */}
-          <nav className="flex flex-wrap gap-x-4 gap-y-1">
+          <nav aria-label="Liens légaux" className="flex flex-wrap gap-x-4 gap-y-1">
             <Link to="/legal/mentions-legales" className="hover:text-indigo-600">
               Mentions légales
             </Link>

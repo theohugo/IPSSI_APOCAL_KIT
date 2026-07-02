@@ -40,15 +40,21 @@ export default function LoginPage() {
         </p>
 
         {error && (
-          <div className="mb-4 p-3 bg-rose-50 border-l-4 border-rose-500 text-sm text-rose-900 rounded">
+          <div
+            role="alert"
+            className="mb-4 p-3 bg-rose-50 border-l-4 border-rose-500 text-sm text-rose-900 rounded"
+          >
             {error}
           </div>
         )}
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label className="block text-sm font-medium text-slate-700 mb-1">Email</label>
+            <label htmlFor="login-email" className="block text-sm font-medium text-slate-700 mb-1">
+              Email
+            </label>
             <input
+              id="login-email"
               type="email"
               required
               autoFocus
@@ -61,12 +67,15 @@ export default function LoginPage() {
 
           <div>
             <div className="flex items-center justify-between mb-1">
-              <label className="block text-sm font-medium text-slate-700">Mot de passe</label>
+              <label htmlFor="login-password" className="block text-sm font-medium text-slate-700">
+                Mot de passe
+              </label>
               <Link to="/forgot-password" className="text-xs text-indigo-600 hover:underline">
                 Mot de passe oublié ?
               </Link>
             </div>
             <input
+              id="login-password"
               type="password"
               required
               autoComplete="current-password"

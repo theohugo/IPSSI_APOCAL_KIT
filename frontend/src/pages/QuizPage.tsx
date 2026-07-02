@@ -63,6 +63,8 @@ export default function QuizPage() {
       {/* Résultat */}
       {result && (
         <div
+          role="status"
+          aria-live="polite"
           className={`card border-l-4 ${
             result.score >= 7
               ? 'border-emerald-500 bg-emerald-50'
@@ -120,6 +122,7 @@ export default function QuizPage() {
                     key={optIdx}
                     type="button"
                     disabled={!!result}
+                    aria-pressed={!result ? isSelected : undefined}
                     onClick={() => handleSelect(q.index, optIdx)}
                     className={`w-full text-left p-3 border-2 rounded transition ${cls}`}
                   >
