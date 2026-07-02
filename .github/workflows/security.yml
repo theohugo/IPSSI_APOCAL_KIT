@@ -1,0 +1,51 @@
+# Perturbation J3 (OWASP LLM-01) — Gate de sécurité dédié.
+#
+# Workflow séparé de la CI principale pour donner une VISIBILITÉ explicite au
+# contrôle anti-injection de prompt : un check « Security » distinct apparaît
+# sur chaque PR. Les tests adversariaux sont des fonctions pures (pas de DB),
+# ce job n'a donc pas besoin de PostgreSQL et reste très rapide.
+name: Security
+
+on:
+  push:
+    branches: ['main']
+  pull_request:
+    branches: ['main']
+
+permissions:
+  contents: read
+
+jobs:
+  prompt-injection:
+    name: Tests adversariaux (prompt injection J3)
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: ./backend
+
+    env:
+      DJANGO_DEBUG: 'False'
+      DJANGO_SECRET_KEY: 'ci-only-not-secret'
+      DJANGO_ALLOWED_HOSTS: '*'
+      LLM_BACKEND: mock
+
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: Setup Python 3.11
+        uses: actions/setup-python@v6
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+          cache-dependency-path: backend/requirements-dev.txt
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements-dev.txt
+
+      # Gate bloquant : toute régression de la garde anti-injection
+      # (backend/llm/services/prompt_guard.py) échoue ce workflow.
+      - name: Tests adversariaux J3 (OWASP LLM-01)
+        run: pytest llm/tests/test_prompt_injection.py -v
