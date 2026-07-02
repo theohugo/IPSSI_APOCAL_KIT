@@ -16,6 +16,8 @@ import logging
 from django.contrib.auth import login as django_login
 from django.contrib.auth import logout as django_logout
 from django.contrib.auth.models import User
+from django.http import HttpResponse
+from django.utils import timezone
 from drf_spectacular.utils import OpenApiResponse, extend_schema
 from rest_framework import status
 from rest_framework.authtoken.models import Token
@@ -23,10 +25,13 @@ from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
+from .audit import record_event
 from .emails import EmailError, send_password_reset_email, send_verification_email
-from .models import get_or_create_profile
+from .exporting import SUPPORTED_FORMATS, build_export_artifact
+from .models import AuditEvent, DataRequest, get_or_create_profile
 from .serializers import (
     ChangePasswordSerializer,
+    DataRequestSerializer,
     DeleteAccountSerializer,
     EmailVerifySerializer,
     LoginSerializer,
@@ -268,15 +273,19 @@ class ProfileView(APIView):
     )
     def delete(self, request):
         # Suppression DURE (hard delete) : confirmée par le mot de passe.
-        # [TODO J3-bis RGPD] Avant de supprimer, proposer un export des données
-        #   personnelles (droit à la portabilité). Voir Lot futur "export RGPD".
+        # J3-bis RGPD : le droit à la portabilité est assuré EN AMONT via
+        # POST /api/accounts/data-export/ (le front propose l'export avant cet
+        # appel). La suppression est le « droit à l'effacement » (RGPD art. 17).
         serializer = DeleteAccountSerializer(data=request.data, context={"request": request})
         serializer.is_valid(raise_exception=True)
 
         user = request.user
+        # Trace d'audit : on log AVANT le delete (l'AuditEvent est en CASCADE et
+        # disparaît avec le compte ; on garde donc une trace applicative).
+        logger.info("Suppression de compte (RGPD art. 17) pour user id=%s", user.pk)
         Token.objects.filter(user=user).delete()  # invalide le token courant
         django_logout(request)
-        user.delete()  # supprime aussi le Profile (on_delete=CASCADE)
+        user.delete()  # supprime aussi Profile / quiz / audit (on_delete=CASCADE)
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
@@ -303,3 +312,85 @@ class ChangePasswordView(APIView):
         Token.objects.filter(user=user).delete()
         token = Token.objects.create(user=user)
         return Response({"detail": "Mot de passe modifié.", "token": token.key})
+
+
+# ---------------------------------------------------------------------------
+# Perturbation J3-bis (SAR RGPD) : droit d'accès et à la portabilité
+# ---------------------------------------------------------------------------
+
+
+class DataExportView(APIView):
+    """Export RGPD des données personnelles de l'utilisateur connecté.
+
+    GET  /api/accounts/data-export/  — historique de ses demandes d'export (JSON)
+    POST /api/accounts/data-export/  — génère et télécharge l'export (JSON ou ZIP)
+
+    [Note pédagogique] Droit d'accès (RGPD art. 15) et portabilité (art. 20) :
+    l'utilisateur récupère TOUTES ses données dans un format lisible par machine.
+    On trace chaque demande dans `DataRequest` (+ un `AuditEvent`) sans jamais
+    archiver le fichier côté serveur — on stocke seulement son empreinte SHA-256.
+    """
+
+    permission_classes = [IsAuthenticated]
+
+    @extend_schema(responses={200: DataRequestSerializer(many=True)})
+    def get(self, request):
+        requests = DataRequest.objects.filter(requester=request.user)
+        return Response(DataRequestSerializer(requests, many=True).data)
+
+    @extend_schema(
+        responses={200: OpenApiResponse(description="Fichier d'export (application/json ou zip)")}
+    )
+    def post(self, request):
+        output_format = str(
+            request.data.get("format") or request.query_params.get("format") or "json"
+        ).lower()
+        if output_format not in SUPPORTED_FORMATS:
+            return Response(
+                {"detail": f"Format non supporté. Choix : {', '.join(SUPPORTED_FORMATS)}."},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        data_request = DataRequest.objects.create(
+            requester=request.user,
+            requested_format=output_format,
+            status=DataRequest.Status.PROCESSING,
+        )
+        try:
+            artifact = build_export_artifact(request.user, output_format)
+        except Exception as exc:  # pragma: no cover - garde-fou
+            data_request.status = DataRequest.Status.FAILED
+            data_request.error_message = str(exc)[:500]
+            data_request.save(update_fields=["status", "error_message"])
+            logger.exception("Échec de l'export RGPD pour user id=%s", request.user.pk)
+            return Response(
+                {"detail": "La génération de l'export a échoué."},
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            )
+
+        data_request.status = DataRequest.Status.RESPONDED
+        data_request.responded_at = timezone.now()
+        data_request.export_sha256 = artifact.sha256_hex
+        data_request.export_filename = artifact.filename
+        data_request.response_size = len(artifact.content)
+        data_request.save(
+            update_fields=[
+                "status",
+                "responded_at",
+                "export_sha256",
+                "export_filename",
+                "response_size",
+            ]
+        )
+        record_event(
+            request.user,
+            AuditEvent.Type.DATA_EXPORT,
+            message=f"Export RGPD ({output_format}) généré.",
+            sha256=artifact.sha256_hex,
+            size=len(artifact.content),
+        )
+
+        response = HttpResponse(artifact.content, content_type=artifact.content_type)
+        response["Content-Disposition"] = f'attachment; filename="{artifact.filename}"'
+        response["X-Export-SHA256"] = artifact.sha256_hex
+        return response
