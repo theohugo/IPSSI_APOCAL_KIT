@@ -10,7 +10,7 @@
 | **Version** | v1.0 |
 | **Date** | 01/07/2026 |
 | **Statut** | ✅ Réponse rédigée (dans le délai de 48 h) |
-| **Rédacteur** | Souleymane FALL |
+| **Rédacteurs** | Souleymane FALL · Dina CHAOUKI |
 
 > Liens : [Export RGPD (SAR)](j3bis-rgpd.md) · [Politique de rétention](j3bis-politique-retention.md).
 
@@ -67,12 +67,39 @@ Au-delà de l'accès (Art. 15), vous disposez également des droits de :
 
 **Conservation**
 
-Les durées de conservation par type de donnée sont détaillées dans notre [politique de rétention](j3bis-politique-retention.md).
+Les durées de conservation par type de donnée sont détaillées dans notre [politique de rétention opérationnelle](j3bis-politique-retention.md) et dans la [politique légale de rétention](../legal/retention.md).
 
 Pour toute question, vous pouvez répondre à cet email (notre délégué à la protection des données, **dpo@edututor-ia.fr**), ou saisir la CNIL.
 
 Bien cordialement,
 **L'équipe EduTutor IA — Protection des données**
+
+---
+
+## Contact DPO et recours
+
+Pour toute question complémentaire relative à vos données personnelles :
+
+| Contact | Détail |
+|---|---|
+| **DPO EduTutor IA** | `dpo@edututor-ia.fr` *(contact fictif — contexte pédagogique)* |
+| **Délai de réponse** | 30 jours maximum (RGPD Art. 12), 48 h pour cette perturbation POC |
+| **Réclamation CNIL** | [https://www.cnil.fr/fr/plaintes](https://www.cnil.fr/fr/plaintes) |
+
+---
+
+## Audit trail SAR — Réf. SAR-2026-001
+
+| Champ | Valeur |
+|---|---|
+| **Identifiant demande** | SAR-2026-001 |
+| **Demandeur** | M. Hugo Petit |
+| **Date de réception** | Mercredi 10h30 |
+| **Statut** | Répondue |
+| **Date de réponse** | Jeudi, dans le délai de 48 h |
+| **Données transmises** | Export JSON/ZIP complet — 6 catégories |
+| **Trace applicative** | Modèle `DataRequest` + événement `AuditEvent.DATA_EXPORT` |
+| **Contrôle d'intégrité** | Empreinte `X-Export-SHA256` renvoyée avec chaque export |
 
 ---
 
