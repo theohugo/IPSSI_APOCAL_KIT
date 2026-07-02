@@ -91,6 +91,9 @@ Il couvre l'ensemble de la semaine : le **MVP must-have F1–F6** (Release 1), l
 | **E11** | MVP2 / Expérience de révision | Dashboard, révision des erreurs, difficulté, explications | R2 | — |
 | **E12** | Feedback utilisateur | Notation des quiz, signalement, collecte de retours | R2 | — |
 | **E13** | Espace enseignant *(perturbation J1)* | Tableau de bord classe, repérage des décrocheurs, conseils ciblés | **R1** | P-J1 |
+| **E14** | Scalabilité nationale *(perturbation J4)* | File de génération, workers, autoscaling, cache/CDN, observabilité coûts | R3 | P-J4 |
+| **E15** | Accessibilité RGAA *(perturbation J4)* | Audit RGAA, navigation clavier, contrastes, ARIA, tests automatisés | R3 | P-J4 |
+| **E16** | Internationalisation i18n *(perturbation J4)* | Interface multilingue, prompts localisés, qualité IA par langue | R3 | P-J4 |
  
 ---
  
@@ -203,7 +206,7 @@ Il couvre l'ensemble de la semaine : le **MVP must-have F1–F6** (Release 1), l
 | US-D.4 | En tant qu'équipe, nous voulons un **déploiement de production** (VPS OVH, HTTPS) afin d'exposer la démo. | 🟡 C | 8 | ⬜ (cf. `docs/11-*`) |
 | US-D.5 | En tant qu'équipe, nous voulons un **post-mortem** après la crise afin de capitaliser. | 🟠 S | 1 | ⬜ template |
  
-> **📌 P5 — Livraison/Crise (jeudi 10h).** Préparer rollback rapide (`--fast`), checklist de démo et template post-mortem → **SPK-5**.
+> **📌 P5 / J4 — Passage à l'échelle (jeudi 10h).** Préparer la matrice de risques, la repriorisation MoSCoW, le backlog préventif et le burnup actualisé → **SPK-5**.
  
 ## E10 — Qualité & exploitation *(transverse)*
  
@@ -242,6 +245,36 @@ Il couvre l'ensemble de la semaine : le **MVP must-have F1–F6** (Release 1), l
 | US-FB.2 | **Signaler une question erronée** afin d'améliorer la base. | 🟡 C | 3 | ⬜ |
 | US-FB.3 | **Collecter les retours** (formulaire / NPS) afin de prioriser la suite. | 🟡 C | 3 | ⬜ |
  
+---
+
+# 5bis. RELEASE 3 — Plateforme publique nationale *(J4 : RGAA · i18n · scalabilité)*
+
+> **Mise à jour J4.** Le succès viral et l'intérêt de l'État ajoutent un périmètre de **68 points**. Ces stories ne sont pas glissées en douce dans la Release 2 : elles forment une **Release 3 « Plateforme publique »**, priorisée par risques et tracée dans [j4-passage-echelle.md](../perturbations/j4-passage-echelle.md) et [j4-burndown-burnup.md](j4-burndown-burnup.md).
+
+## E14 — Scalabilité nationale
+
+| ID | User Story | Risque couvert | MoSCoW | Pts | État code |
+|----|------------|:--------------:|:------:|:---:|-----------|
+| US-SC.1 | En tant qu'équipe, nous voulons une **génération de quiz asynchrone** (file + workers) afin d'encaisser des pics nationaux. | R1 | 🔴 M | 13 | ⬜ |
+| US-SC.2 | En tant qu'équipe, nous voulons un **repli LLM managé UE** activable par feature-flag afin d'absorber le débordement du LLM local. | R2 | 🔴 M | 8 | ⬜ |
+| US-SC.3 | En tant qu'architecte, je veux une **ADR de migration scalable** (cache/CDN/autoscaling) afin de tracer les choix avant de coder. | R1/R6 | 🟠 S | 8 | ⬜ |
+| US-SC.4 | En tant qu'équipe produit, nous voulons une **observabilité FinOps** (quotas, métriques coûts) afin de maîtriser la levée et l'infra. | R7 | 🟡 C | 5 | ⬜ |
+
+## E15 — Accessibilité RGAA
+
+| ID | User Story | Risque couvert | MoSCoW | Pts | État code |
+|----|------------|:--------------:|:------:|:---:|-----------|
+| US-A11Y.1 | En tant qu'utilisateur en situation de handicap, je veux une application **conforme RGAA en priorité** (contraste, clavier, ARIA) afin de réviser sans barrière. | R3 | 🔴 M | 8 | ⬜ |
+| US-A11Y.2 | En tant qu'équipe, nous voulons des **tests d'accessibilité automatisés** (axe-core en CI) afin d'éviter les régressions RGAA. | R3 | 🟠 S | 5 | ⬜ |
+
+## E16 — Internationalisation i18n
+
+| ID | User Story | Risque couvert | MoSCoW | Pts | État code |
+|----|------------|:--------------:|:------:|:---:|-----------|
+| US-I18N.1 | En tant que lycéen international, je veux une **interface multilingue** (FR/EN, extensible) afin d'utiliser EduTutor IA hors France. | i18n | 🟠 S | 8 | ⬜ |
+| US-I18N.2 | En tant qu'utilisateur, je veux des **réponses IA dans ma langue** (détection + prompts localisés) afin d'obtenir des quiz pédagogiques cohérents. | R4 | 🟠 S | 8 | ⬜ |
+| US-RGPD-INT.1 | En tant que DPO, je veux un **hébergement UE + DPA documentés** afin de maîtriser les transferts à l'international. | R5 | 🔴 M | 5 | ⬜ |
+
 ## ⚪ Won't have (this time)
  
 | ID | Item | Raison |
@@ -262,7 +295,7 @@ Il couvre l'ensemble de la semaine : le **MVP must-have F1–F6** (Release 1), l
 | SPK-2 | **ADR LLM** : comparer fournisseurs, trancher latence/coût/qualité | P2 (mar. 10h) | 3 | ADR rédigé (`docs/`) |
 | SPK-3 | **Sécurité** : concevoir + jouer les tests d'injection | P3 (mer. 10h) | 3 | Jeu de tests adversariaux + correctifs |
 | SPK-4 | **RGPD** : cartographier les données + plan de conformité | P4 (mer. 14h) | 3 | Registre de traitement + 4 pages légales remplies |
-| SPK-5 | **Runbook crise** : procédure incident + rollback + post-mortem | P5 (jeu. 10h) | 2 | Runbook + template post-mortem |
+| SPK-5 | **Passage à l'échelle** : risques, backlog préventif, burndown/burnup | P5 / J4 (jeu. 10h) | 2 | Matrice risques + actions E14/E15/E16 + burnup actualisé |
  
 ---
  
@@ -298,6 +331,7 @@ Vérification appliquée à toutes les stories must-have ; exemple sur **US-F3.1
 | **R1 — Transverse** (E7–E10) | 22 | 24 | 14 | ~60 |
 | **Spikes** | 13 | — | — | 13 |
 | **R2** (E11–E12) | — | 21 | 35 | ~56 |
+| **R3 — Plateforme publique J4** (E14–E16 + RGPD international) | 26 | 29 | 13 | **68** |
  
 > **Lecture brownfield** : ~60 % des stories Must de E1–E6 sont en `🔧 partiel`. L'effort dominant n'est pas de coder de zéro mais de **fiabiliser, brancher front↔back et tester**.
  
@@ -308,7 +342,7 @@ Vérification appliquée à toutes les stories must-have ; exemple sur **US-F3.1
 | **Lundi (J1)** | Cadrage, E1/E2, Story Map, planning Sprint 1 | P1 — Produit/Scope (14h) |
 | **Mardi (J2)** | E2/E3, fiabilisation génération, ADR LLM | P2 — Latence/ADR (10h) |
 | **Mercredi (J3)** | E4/E5/E6 + durcissement E7, RGPD E8 → **Release 1 (17h45)** | P3 — Sécurité (10h) · P4 — RGPD (14h) |
-| **Jeudi (J4)** | E11/E12 (R2), E9 livraison | P5 — Crise (10h) |
+| **Jeudi (J4)** | Replanification J4 : E14 scalabilité, E15 RGAA, E16 i18n + R2 si capacité | P5 — Passage à l'échelle (10h) |
 | **Vendredi (J5)** | Stabilisation, démo finale, post-mortem | — |
  
 ## Ordre d'attaque recommandé
@@ -316,7 +350,7 @@ Vérification appliquée à toutes les stories must-have ; exemple sur **US-F3.1
 1. **Fiabiliser le parcours MVP de bout en bout** : US-F3.1 (parsing JSON) → US-F4.1 → US-F5.1/F5.2 → US-F6.1. Sans une chaîne génération→correction→score→historique solide, pas de démo.
 2. **ADR LLM** (US-X.3 / SPK-2) — débloque la décision technique structurante de la semaine.
 3. **Sécurité + RGPD** (E7/E8) — P3 et P4 tombent le mercredi, jour de la Release 1.
-4. **Runbook crise** (SPK-5) — prêt avant jeudi 10h.
+4. **Passage à l'échelle J4** (SPK-5) — matrice risques + backlog préventif E14/E15/E16 + burnup actualisé.
 5. **R2 à forte valeur** : US-R2.4 (explications), US-R2.6 (dashboard, déjà codé).
 ---
  
@@ -326,7 +360,8 @@ Vérification appliquée à toutes les stories must-have ; exemple sur **US-F3.1
 - **Risque n°1** : robustesse du parsing JSON de sortie LLM (US-F3.1) → **bloquant** pour F4/F5. À sécuriser en premier.
 - **Risque n°2** : extraction de texte PDF (US-F2.1) variable selon les fichiers → prévoir le fallback texte (US-F2.4).
 - **Risque n°3** : latence Ollama (P2) → l'ADR doit trancher sans sacrifier la contrainte RGPD (rester local par défaut).
-- **Décisions attendues du PO** : (1) confirmer le périmètre Must ci-dessus ; (2) trancher les `S` à inclure dans le Sprint 1 ; (3) acter la réponse de principe à P1.
+- **Risque J4** : le passage à l'échelle ajoute **68 points**. Le PO doit accepter une **Release 3** distincte plutôt qu'un empilement non piloté dans R2.
+- **Décisions attendues du PO** : (1) confirmer le périmètre Must ci-dessus ; (2) trancher les `S` à inclure dans le Sprint 1 ; (3) acter la réponse de principe à P1 ; (4) valider l'ordre J4 : **RGAA et scalabilité en Must**, i18n en Should.
 ---
  
 # 10. Grille d'auto-évaluation
@@ -340,6 +375,7 @@ Vérification appliquée à toutes les stories must-have ; exemple sur **US-F3.1
 | Couverture du MVP F1-F6 + transverse (sécurité, RGPD, CI/CD) | ☑ Oui | Épics E1–E10, Release 1 complète. |
 | Inventaire brownfield de l'existant (état réel du code) | ☑ Oui | Colonne « État code » (✅/🔧/⬜) par story. |
 | Pistes Release 2 cataloguées | ☑ Oui | §5 (E11–E12) + Won't have tracé. |
+| Release 3 J4 cadrée | ☑ Oui | §5bis : E14/E15/E16 + 68 pts de scope préventif. |
 | Préparation des 5 perturbations (spikes) | ☑ Oui | §6 SPK-1 à SPK-5 rattachés aux perturbations. |
 | Notes d'arbitrage fournies au PO | ☑ Oui | §9 risques + décisions attendues du PO. |
 | Le document a été relu et validé par l'équipe | ☑ Oui | Revue d'équipe avant remise · validation PO en attente. |

@@ -32,6 +32,8 @@ Chaque cellule pointe vers une **user story de notre [Product Backlog](product-b
 
 **Spécificité Équipe 6** : conformément à notre positionnement *enseignant-first* et à la **perturbation J1**, le backbone inclut une **7ᵉ activité « Piloter sa classe »** (enseignante Mme Lefèvre) que les parcours purement étudiants n'ont pas.
 
+**Mise à jour J4** : le passage à l'échelle ajoute une **8ᵉ activité transverse « Utiliser la plateforme publique »**. Elle ne remplace pas le parcours MVP ; elle ajoute les exigences nécessaires pour une adoption nationale : **RGAA**, **i18n** et **scalabilité**.
+
 ---
 
 ## 2. Backbone — Activités utilisateur (epics)
@@ -45,6 +47,7 @@ Chaque cellule pointe vers une **user story de notre [Product Backlog](product-b
 | 5 | **Consulter ses résultats** | E5 | Lucas, Léa, Karim |
 | 6 | **Suivre sa progression** | E6 | Karim (régulier) |
 | 7 | **Piloter sa classe** *(enseignant·e — J1)* | E11 / espace enseignant | Mme Lefèvre |
+| 8 | **Utiliser la plateforme publique** *(J4)* | E14 / E15 / E16 | Amina, Diego, État / DPO |
 
 ---
 
@@ -68,8 +71,22 @@ Chaque cellule pointe vers une **user story de notre [Product Backlog](product-b
 | **🥇 Walking skeleton (MVP)** | Toute la **ligne MUST** : parcours complet s'inscrire → déposer → générer → passer → résultats → historique **+ espace enseignant** (US-T.x) | **Mercredi 17h45 (R1)** |
 | **🥈 Confort R1** | Stories **SHOULD** insérées si la vélocité le permet (messages d'erreur, RAG ancré, landing) | Mercredi, si capacité |
 | **🥉 Release 2** | Stories **COULD** (RAG renforcé, explications, dashboard enseignant) arbitrées par le PO | **Jeudi soir (R2)** |
+| **🏛️ Release 3 — Plateforme publique** | Passage à l'échelle J4 : scalabilité nationale (US-SC.*), accessibilité RGAA (US-A11Y.*), i18n (US-I18N.*), conformité internationale (US-RGPD-INT.1) | Cadrée jeudi, planifiée au-delà de la semaine |
 
 > **Risque n°1 (cf. backlog §9)** : la chaîne **US-F3.1 → US-F4.1 → US-F5.1 → US-F6.1** est majoritairement en 🔧. C'est le **chemin critique du MVP** : à fiabiliser en priorité, sinon pas de démo.
+
+---
+
+## 4bis. Addendum J4 — Activité transverse « Plateforme publique »
+
+| Axe J4 | Activité utilisateur | Stories backlog | MoSCoW |
+|---|---|---|:--:|
+| **Scalabilité** | Générer un quiz même en période de pic national, sans timeout ni file bloquante visible. | US-SC.1, US-SC.2, US-SC.3, US-SC.4 | M/M/S/C |
+| **Accessibilité RGAA** | Naviguer au clavier, lire l'interface au lecteur d'écran, comprendre les erreurs et focus. | US-A11Y.1, US-A11Y.2 | M/S |
+| **Internationalisation** | Choisir une langue d'interface et obtenir des quiz IA cohérents dans cette langue. | US-I18N.1, US-I18N.2 | S/S |
+| **Conformité internationale** | Garantir hébergement UE, DPA et absence de transfert non maîtrisé. | US-RGPD-INT.1 | M |
+
+> Lecture PO : ces stories sont **préventives**. Elles réduisent les risques J4 identifiés dans [j4-passage-echelle.md](../perturbations/j4-passage-echelle.md) et ne doivent pas être confondues avec le périmètre de démonstration R1/R2.
 
 ---
 
@@ -96,8 +113,9 @@ ACTIVITÉS →  1.Compte   2.Cours   3.Générer  4.Passer  5.Résultats 6.Progr
 | La ligne MUST décrit bien le MVP Release 1 (F1–F6) | ☑ Oui | §3 ligne MUST + §4 walking skeleton. |
 | Chaque cellule est tracée vers une user story | ☑ Oui | Renvois US-Fx.x / US-T.x / US-Rx.x du [Product Backlog](product-backlog.md). |
 | L'état réel du code (brownfield) est indiqué | ☑ Oui | Icônes ✅/🔧/⬜ par cellule (spécificité équipe 6). |
-| Les tranches de livraison (R1/R2) sont identifiées | ☑ Oui | §4 release slices avec échéances. |
+| Les tranches de livraison (R1/R2/R3) sont identifiées | ☑ Oui | §4 release slices avec échéances. |
 | La perturbation J1 (enseignant) est intégrée | ☑ Oui | Colonne 7 « Piloter sa classe » + US-T.x en MUST. |
+| La perturbation J4 est intégrée | ☑ Oui | §4bis : activité transverse plateforme publique + E14/E15/E16. |
 | Le document a été relu et validé par l'équipe | ☑ Oui | Revue d'équipe avant remise · validation PO en attente. |
 
 ---

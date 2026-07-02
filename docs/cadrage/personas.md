@@ -8,11 +8,11 @@
 | **Membres** | Kahil MOKHTARI · Amine HADDANE · Souleymane FALL · Nikola MILOSAVLJEVIC · Dina CHAOUKI · Rayan ZEBAZE SAO · Hugo RAGUIN |
 | **Sprint concerné** | Cadrage |
 | **Artefact** | 2 sur 7 — Personas |
-| **Version** | v1.2 (perturbation J1 + persona Lucas pour cohérence Customer Journey) |
+| **Version** | v1.3 (J1 + Lucas + personas J4 RGAA/i18n) |
 | **Date de remise** | 29/06/2026 |
 | **Statut** | Draft (à valider PO) |
 | **Rédacteur** | Hugo RAGUIN |
-| **Fichier** | `equipe-6-personas-v1.2` |
+| **Fichier** | `equipe-6-personas-v1.3` |
 
 > Produit : **EduTutor IA** — assistant IA de révision, *enseignant-first*, génération ancrée dans les cours (RAG) et 100 % local (Ollama, RGPD).
 > Liens : [Product Vision Board](product-vision-board.md) · [Product Backlog](product-backlog.md) · [Perturbation J1 — Produit](perturbations/j1-produit.md).
@@ -30,9 +30,12 @@ Ce document décrit les **utilisateurs cibles** d'EduTutor IA afin d'orienter le
 >
 > Détail et décision : voir [Perturbation J1 — Produit](perturbations/j1-produit.md).
 
+> **Mise à jour suite à la perturbation J4 (Passage à l'échelle).** L'adoption nationale et l'intérêt de l'État ajoutent deux cibles de risque : les élèves en situation de handicap et les utilisateurs internationaux. Ils ne remplacent pas les personas MVP, mais orientent la **Release 3 « Plateforme publique »** : RGAA, i18n et scalabilité.
+
 On distingue donc :
 
 - **Personas primaires** — pilotent le MVP. Deux usages : l'étudiant qui révise (F1–F6) **et** l'enseignante qui suit sa classe (Espace enseignant). Côté étudiant, trois profils : **Lucas** (persona de référence du [Customer Journey](03_customer_journey_map.md)), **Léa** et **Karim**.
+- **Personas d'extension J4** — pilotent la Release 3 : **Amina** (accessibilité RGAA) et **Diego** (internationalisation).
 - **Anti-persona** — qui le produit **ne** vise **pas**, pour cadrer le périmètre.
 
 Chaque persona indique les **user stories** qu'il justifie (traçabilité avec le backlog).
@@ -165,6 +168,42 @@ Chaque persona indique les **user stories** qu'il justifie (traçabilité avec l
 
 ---
 
+## 5bis. Personas d'extension J4 — Plateforme publique
+
+> Ces personas cadrent le passage d'un MVP scolaire à une plateforme publique nationale. Ils alimentent les épics **E14 Scalabilité**, **E15 Accessibilité RGAA** et **E16 i18n** du [Product Backlog](product-backlog.md).
+
+### Amina Benali — lycéenne malvoyante, lectrice d'écran
+
+| | |
+|---|---|
+| **Âge / situation** | 17 ans, lycéenne à Marseille, prépare le bac avec un lecteur d'écran |
+| **Aisance numérique** | Bonne avec clavier + NVDA, très sensible aux pièges de focus et libellés absents |
+| **Contexte** | Utilise EduTutor IA si l'État le recommande dans son lycée ; doit pouvoir réviser sans assistance |
+| **Citation** | « Je veux réviser comme les autres : que l'appli soit lisible au clavier et annoncée correctement. » |
+
+**Besoins → User stories**
+- Navigation 100 % clavier, focus visible, libellés ARIA → **US-A11Y.1**
+- Tests automatisés pour éviter les régressions RGAA → **US-A11Y.2**
+- Messages d'erreur compréhensibles et annoncés → rattachement E15 / E1
+
+### Diego Martín — lycéen international, usage espagnol
+
+| | |
+|---|---|
+| **Âge / situation** | 16 ans, lycéen à Madrid, suit des cours en espagnol et en anglais |
+| **Aisance numérique** | Élevée, mobile-first, habitué aux outils multilingues |
+| **Contexte** | Découvre EduTutor IA après l'ouverture internationale financée par la levée |
+| **Citation** | « Je veux l'interface et des quiz dans ma langue, pas une traduction approximative. » |
+
+**Besoins → User stories**
+- Interface multilingue FR/EN puis extensible → **US-I18N.1**
+- Détection de langue + prompts localisés pour les réponses IA → **US-I18N.2**
+- Garantie d'hébergement UE et conformité internationale → **US-RGPD-INT.1**
+
+**Note de cadrage J4** : Amina rend l'exigence RGAA non négociable pour le marché public ; Diego matérialise l'i18n comme besoin produit et pas seulement traduction d'interface. Ces personas justifient le saut de périmètre J4 visible dans le burnup.
+
+---
+
 ## 6. Anti-persona — Thomas, le candidat à un concours généraliste
 
 | | |
@@ -184,9 +223,13 @@ Chaque persona indique les **user stories** qu'il justifie (traçabilité avec l
 | **Léa** | Primaire (étudiant) | MVP F2/F3/F5/F6 | US-F2.x, US-F3.1, US-F5.x, US-F6.1 |
 | **Karim** | Primaire (étudiant) | MVP F1/F6 + RGPD | US-F1.x, US-F6.x, US-R2.5 |
 | **Sophie Lefèvre** | Primaire (enseignante, perturbation J1) | MVP Espace enseignant + F3 | US-T.1, US-T.2, US-T.3, US-F3.1 |
+| **Amina Benali** | Extension J4 (accessibilité) | Release 3 RGAA | US-A11Y.1, US-A11Y.2 |
+| **Diego Martín** | Extension J4 (international) | Release 3 i18n | US-I18N.1, US-I18N.2, US-RGPD-INT.1 |
 | **Thomas** | Anti-persona | Hors périmètre | US-W.x |
 
 **À retenir pour le Product Owner** : depuis la perturbation J1, le **Sprint 1 sert deux cibles principales** — les étudiants (Lucas, Léa, Karim) **et** l'enseignante (Mme Lefèvre). Les fonctionnalités de suivi de classe, autrefois en Release 2, font désormais partie du périmètre prioritaire.
+
+**À retenir pour J4** : la plateforme publique ajoute des contraintes de service public. Amina et Diego ne changent pas le MVP livré ; ils justifient la Release 3 et la priorisation **RGAA + scalabilité en Must**, i18n en Should.
 
 ---
 
@@ -201,6 +244,7 @@ Chaque persona indique les **user stories** qu'il justifie (traçabilité avec l
 | Chaque persona est tracé vers des user stories du backlog | ☑ Oui | « Besoins → User stories » (US-F1.x à US-T.3). |
 | Un anti-persona cadre le hors-périmètre | ☑ Oui | §5 Thomas (candidat concours généraliste) → US-W.x. |
 | La perturbation J1 est intégrée et tracée | ☑ Oui | Mme Sophie Lefèvre repositionnée primaire (§4) + lien perturbation J1. |
+| La perturbation J4 est intégrée et tracée | ☑ Oui | §5bis Amina/Diego + liens vers E14/E15/E16. |
 | Une synthèse de priorisation oriente le PO | ☑ Oui | §6 table de synthèse + note d'arbitrage PO. |
 | Le document a été relu et validé par l'équipe | ☑ Oui | Revue d'équipe avant remise · validation PO en attente. |
 
@@ -220,6 +264,7 @@ Chaque persona indique les **user stories** qu'il justifie (traçabilité avec l
 - **v1.0** — version initiale (cadrage matinal, 29/06/2026)
 - **v1.1** — intégration de la perturbation J1 : Mme Lefèvre repositionnée cible primaire
 - **v1.2** — ajout du persona Lucas Moreau (cohérence avec le Customer Journey Map)
+- **v1.3** — ajout des personas J4 Amina/Diego pour RGAA et i18n
 - **v2.0** — révision majeure suite à une prochaine perturbation (changement de scope)
 
 ---
