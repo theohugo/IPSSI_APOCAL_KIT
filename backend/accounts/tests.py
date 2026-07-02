@@ -186,3 +186,51 @@ def test_data_export_history(client, user):
     assert response.status_code == 200
     assert len(response.data) == 1
     assert response.data[0]["status"] == "responded"
+
+
+# --- Endpoint canonique de l'énoncé : GET /api/accounts/me/export/ ---
+
+
+def test_me_export_requires_auth(client):
+    response = client.get("/api/accounts/me/export/")
+    assert response.status_code in (401, 403)
+
+
+def test_me_export_get_returns_6_categories(client, user):
+    import json
+
+    from accounts.models import AuditEvent, DataRequest
+
+    _quiz_for(user)
+    client.force_authenticate(user=user)
+
+    response = client.get("/api/accounts/me/export/")
+    assert response.status_code == 200, response.content
+    assert response["Content-Type"] == "application/json"
+    assert "attachment;" in response["Content-Disposition"]
+
+    payload = json.loads(response.content)
+    # Les 6 catégories demandées par l'énoncé J3-bis doivent être présentes.
+    for key in ("account", "quizzes", "answers", "reports", "data_requests", "audit_logs"):
+        assert key in payload, f"catégorie manquante : {key}"
+    assert payload["account"]["email"] == "alice@test.com"
+    assert payload["quizzes"][0]["title"] == "Cours de biologie"
+
+    # GET produit bien la trace (DataRequest responded + AuditEvent).
+    dr = DataRequest.objects.get(requester=user)
+    assert dr.status == DataRequest.Status.RESPONDED
+    assert dr.export_sha256 == response["X-Export-SHA256"]
+    assert AuditEvent.objects.filter(user=user, event_type="data_export").exists()
+
+
+def test_me_export_zip_format(client, user):
+    client.force_authenticate(user=user)
+    response = client.get("/api/accounts/me/export/?fmt=zip")
+    assert response.status_code == 200
+    assert response["Content-Type"] == "application/zip"
+
+
+def test_me_export_rejects_unknown_format(client, user):
+    client.force_authenticate(user=user)
+    response = client.get("/api/accounts/me/export/?fmt=pdf")
+    assert response.status_code == 400
