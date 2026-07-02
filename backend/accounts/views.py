@@ -16,6 +16,8 @@ import logging
 from django.contrib.auth import login as django_login
 from django.contrib.auth import logout as django_logout
 from django.contrib.auth.models import User
+from django.http import HttpResponse
+from django.utils import timezone
 from drf_spectacular.utils import OpenApiResponse, extend_schema
 from rest_framework import status
 from rest_framework.authtoken.models import Token
@@ -23,10 +25,13 @@ from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
+from .audit import record_event
 from .emails import EmailError, send_password_reset_email, send_verification_email
-from .models import get_or_create_profile
+from .exporting import SUPPORTED_FORMATS, build_export_artifact
+from .models import AuditEvent, DataRequest, get_or_create_profile
 from .serializers import (
     ChangePasswordSerializer,
+    DataRequestSerializer,
     DeleteAccountSerializer,
     EmailVerifySerializer,
     LoginSerializer,
@@ -268,15 +273,19 @@ class ProfileView(APIView):
     )
     def delete(self, request):
         # Suppression DURE (hard delete) : confirmée par le mot de passe.
-        # [TODO J3-bis RGPD] Avant de supprimer, proposer un export des données
-        #   personnelles (droit à la portabilité). Voir Lot futur "export RGPD".
+        # J3-bis RGPD : le droit à la portabilité est assuré EN AMONT via
+        # POST /api/accounts/data-export/ (le front propose l'export avant cet
+        # appel). La suppression est le « droit à l'effacement » (RGPD art. 17).
         serializer = DeleteAccountSerializer(data=request.data, context={"request": request})
         serializer.is_valid(raise_exception=True)
 
         user = request.user
+        # Trace d'audit : on log AVANT le delete (l'AuditEvent est en CASCADE et
+        # disparaît avec le compte ; on garde donc une trace applicative).
+        logger.info("Suppression de compte (RGPD art. 17) pour user id=%s", user.pk)
         Token.objects.filter(user=user).delete()  # invalide le token courant
         django_logout(request)
-        user.delete()  # supprime aussi le Profile (on_delete=CASCADE)
+        user.delete()  # supprime aussi Profile / quiz / audit (on_delete=CASCADE)
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
@@ -303,3 +312,149 @@ class ChangePasswordView(APIView):
         Token.objects.filter(user=user).delete()
         token = Token.objects.create(user=user)
         return Response({"detail": "Mot de passe modifié.", "token": token.key})
+
+
+# ---------------------------------------------------------------------------
+# Perturbation J3-bis (SAR RGPD) : droit d'accès et à la portabilité
+# ---------------------------------------------------------------------------
+
+
+def _perform_export(user, output_format: str):
+    """Génère l'export, trace la demande (`DataRequest` + `AuditEvent`) et renvoie
+    l'artefact. Le fichier n'est JAMAIS archivé côté serveur (seul le SHA-256 est
+    conservé).
+
+    Raises:
+        ValueError: si le format demandé n'est pas supporté (avant toute trace).
+    """
+    if output_format not in SUPPORTED_FORMATS:
+        raise ValueError(output_format)
+
+    data_request = DataRequest.objects.create(
+        requester=user,
+        requested_format=output_format,
+        status=DataRequest.Status.PROCESSING,
+    )
+    try:
+        artifact = build_export_artifact(user, output_format)
+    except Exception as exc:  # pragma: no cover - garde-fou
+        data_request.status = DataRequest.Status.FAILED
+        data_request.error_message = str(exc)[:500]
+        data_request.save(update_fields=["status", "error_message"])
+        logger.exception("Échec de l'export RGPD pour user id=%s", user.pk)
+        raise
+
+    data_request.status = DataRequest.Status.RESPONDED
+    data_request.responded_at = timezone.now()
+    data_request.export_sha256 = artifact.sha256_hex
+    data_request.export_filename = artifact.filename
+    data_request.response_size = len(artifact.content)
+    data_request.save(
+        update_fields=[
+            "status",
+            "responded_at",
+            "export_sha256",
+            "export_filename",
+            "response_size",
+        ]
+    )
+    record_event(
+        user,
+        AuditEvent.Type.DATA_EXPORT,
+        message=f"Export RGPD ({output_format}) généré.",
+        sha256=artifact.sha256_hex,
+        size=len(artifact.content),
+    )
+    return artifact
+
+
+def _export_file_response(artifact):
+    """Enveloppe l'artefact dans une réponse HTTP téléchargeable (pièce jointe)."""
+    response = HttpResponse(artifact.content, content_type=artifact.content_type)
+    response["Content-Disposition"] = f'attachment; filename="{artifact.filename}"'
+    response["X-Export-SHA256"] = artifact.sha256_hex
+    return response
+
+
+def _resolve_format(request) -> str:
+    """Format d'export demandé.
+
+    Côté query on lit `fmt` (et PAS `format`) : `format` est un paramètre
+    réservé par DRF (négociation de renderer) qui renverrait 404 pour une
+    valeur sans renderer (ex. `zip`). Côté body (POST) on accepte `format`.
+    """
+    body_fmt = (
+        request.data.get("format") if isinstance(getattr(request, "data", None), dict) else None
+    )
+    return str(body_fmt or request.query_params.get("fmt") or "json").lower()
+
+
+class MeExportView(APIView):
+    """Export SAR (RGPD art. 15/20) — endpoint canonique de la perturbation J3-bis.
+
+    GET /api/accounts/me/export/?fmt=json|zip — génère et télécharge l'export
+    complet des données personnelles de l'utilisateur connecté.
+
+    [Note pédagogique] L'énoncé J3-bis demande explicitement un `GET
+    /api/accounts/me/export/`. Le GET produit ici un effet de bord assumé (trace
+    de la demande), conforme à l'exigence « répondre à une demande d'accès ».
+    """
+
+    permission_classes = [IsAuthenticated]
+
+    @extend_schema(
+        responses={200: OpenApiResponse(description="Fichier d'export (application/json ou zip)")}
+    )
+    def get(self, request):
+        output_format = _resolve_format(request)
+        try:
+            artifact = _perform_export(request.user, output_format)
+        except ValueError:
+            return Response(
+                {"detail": f"Format non supporté. Choix : {', '.join(SUPPORTED_FORMATS)}."},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+        except Exception:  # pragma: no cover - garde-fou
+            return Response(
+                {"detail": "La génération de l'export a échoué."},
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            )
+        return _export_file_response(artifact)
+
+
+class DataExportView(APIView):
+    """Historique + génération de l'export (compat).
+
+    GET  /api/accounts/data-export/  — historique des demandes d'export (JSON)
+    POST /api/accounts/data-export/  — génère et télécharge l'export (JSON ou ZIP)
+
+    L'endpoint canonique attendu par l'énoncé J3-bis est `GET
+    /api/accounts/me/export/` (voir `MeExportView`) ; cette vue conserve
+    l'historique et une variante POST.
+    """
+
+    permission_classes = [IsAuthenticated]
+
+    @extend_schema(responses={200: DataRequestSerializer(many=True)})
+    def get(self, request):
+        requests = DataRequest.objects.filter(requester=request.user)
+        return Response(DataRequestSerializer(requests, many=True).data)
+
+    @extend_schema(
+        responses={200: OpenApiResponse(description="Fichier d'export (application/json ou zip)")}
+    )
+    def post(self, request):
+        output_format = _resolve_format(request)
+        try:
+            artifact = _perform_export(request.user, output_format)
+        except ValueError:
+            return Response(
+                {"detail": f"Format non supporté. Choix : {', '.join(SUPPORTED_FORMATS)}."},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+        except Exception:  # pragma: no cover - garde-fou
+            return Response(
+                {"detail": "La génération de l'export a échoué."},
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            )
+        return _export_file_response(artifact)

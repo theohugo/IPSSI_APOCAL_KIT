@@ -175,9 +175,16 @@ def main():
         render(md, out)
         print(f"[OK] {os.path.relpath(out, HERE)}")
         n += 1
-    # Perturbations + ADR (préfixe equipe-6 ajouté au nom du fichier)
-    for sub in ("perturbations", "adr"):
-        for md in sorted(glob.glob(os.path.join(HERE, sub, "*.md"))):
+    # Perturbations + ADR (préfixe equipe-6 ajouté au nom du fichier).
+    # Deux emplacements historiques : docs/cadrage/perturbations (J1) et le
+    # dossier frère docs/perturbations (J2, J3, …). Les deux sont auto-découverts.
+    perturbation_dirs = [
+        os.path.join(HERE, "perturbations"),
+        os.path.join(HERE, "adr"),
+        os.path.join(HERE, os.pardir, "perturbations"),
+    ]
+    for pdir in perturbation_dirs:
+        for md in sorted(glob.glob(os.path.join(pdir, "*.md"))):
             base = os.path.splitext(os.path.basename(md))[0]
             out = os.path.join(os.path.dirname(md), f"equipe-6-{base}.docx")
             render(md, out)

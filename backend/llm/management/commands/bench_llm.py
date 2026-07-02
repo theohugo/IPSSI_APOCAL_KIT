@@ -57,12 +57,17 @@ class Command(BaseCommand):
     help = "Benchmark de latence des modèles LLM (perturbation J2)."
 
     def add_arguments(self, parser):
-        parser.add_argument("--specs", default=DEFAULT_SPECS,
-                            help="Liste backend:model séparés par des virgules.")
-        parser.add_argument("--runs", type=int, default=5,
-                            help="Nombre de runs par modèle (>= 5 recommandé).")
-        parser.add_argument("--source-file", default="",
-                            help="Fichier texte du cours de référence (sinon échantillon embarqué).")
+        parser.add_argument(
+            "--specs", default=DEFAULT_SPECS, help="Liste backend:model séparés par des virgules."
+        )
+        parser.add_argument(
+            "--runs", type=int, default=5, help="Nombre de runs par modèle (>= 5 recommandé)."
+        )
+        parser.add_argument(
+            "--source-file",
+            default="",
+            help="Fichier texte du cours de référence (sinon échantillon embarqué).",
+        )
         parser.add_argument("--title", default="Cours de référence J2")
 
     def handle(self, *args, **opts):
@@ -72,8 +77,9 @@ class Command(BaseCommand):
                 source = fh.read()
         runs = opts["runs"]
         title = opts["title"]
-        self.stdout.write(self.style.NOTICE(
-            f"Cours: {len(source)} caractères · {runs} runs/modèle\n"))
+        self.stdout.write(
+            self.style.NOTICE(f"Cours: {len(source)} caractères · {runs} runs/modèle\n")
+        )
 
         rows = []
         for spec in [s for s in opts["specs"].split(",") if s.strip()]:
@@ -86,7 +92,7 @@ class Command(BaseCommand):
                 rows.append((label, rgpd, "—", "—", "—", "client indisponible (clé manquante ?)"))
                 continue
             lat, nq, err = [], None, ""
-            for i in range(runs):
+            for _ in range(runs):
                 t0 = time.perf_counter()
                 try:
                     qs = client.generate_quiz(source_text=source, title=title)
@@ -121,7 +127,11 @@ class Command(BaseCommand):
             if backend == "ollama":
                 return cls(model=model or None)
             prov = PROVIDERS.get(backend)
-            key = getattr(settings, prov.settings_key_attr, "") if (prov and prov.settings_key_attr) else ""
+            key = (
+                getattr(settings, prov.settings_key_attr, "")
+                if (prov and prov.settings_key_attr)
+                else ""
+            )
             if prov and prov.needs_key and not key:
                 return None  # pas de clé → on saute proprement
             return cls(api_key=key, model=model or None)

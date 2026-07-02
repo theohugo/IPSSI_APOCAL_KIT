@@ -61,15 +61,15 @@ L'utilisateur peut supprimer son compte depuis la **page Profil** → "Supprimer
 ### 3.3 Demande d'accès / portabilité (Art. 15 / Art. 20)
 
 L'utilisateur peut exporter l'intégralité de ses données via :
-- **Frontend** : page Profil → "Exporter mes données" (téléchargement JSON/CSV)
-- **API** : `GET /api/accounts/me/export/` (authentification requise)
+- **Frontend** : page Profil → "Exporter mes données" (téléchargement JSON/ZIP)
+- **API** : `GET /api/accounts/me/export/?fmt=json|zip` (authentification requise)
 
 Le fichier export inclut : données de compte, quiz générés, réponses, scores, historique, signalements.
 
 ### 3.4 Contact DPO
 
 Pour toute demande relative à vos données personnelles :  
-**DPO EduTutor IA** : `dpo@edututoria.fr` *(contact fictif — contexte pédagogique)*  
+**DPO EduTutor IA** : `dpo@edututor-ia.fr` *(contact fictif — contexte pédagogique)*  
 Délai de réponse : **30 jours** maximum (Art. 12 RGPD), **48h** pour les demandes SAR en phase POC.
 
 ---
